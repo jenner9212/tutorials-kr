@@ -16,19 +16,19 @@
 -----------------------
 
 이 튜토리얼에서는 `HuggingFace Transformers
-<https://github.com/huggingface/transformers>`_ 예제들을 따라하면서 BERT
-모델을 동적으로 양자화할 것입니다. BERT 처럼 유명하면서도 최고 성능을
+<https://github.com/huggingface/transformers>`_ 예제들을 따라 하면서 BERT
+모델을 동적으로 양자화할 것입니다. BERT처럼 유명하면서도 최고 성능을
 내는 모델을 어떻게 동적으로 양자화된 모델로 변환하는지 한 단계씩 설명하겠습니다.
 
--  BERT 또는 Transformer 의 양방향 임베딩 표현(representation) 이라 불리는 방법은
+-  BERT 또는 Transformer의 양방향 임베딩 표현(representation)이라 불리는 방법은
    질의응답, 문장 분류 등의 여러 자연어 처리 분야(문제)에서 최고 성능을 달성한
    새로운 언어 표현 사전학습 방법입니다. 원 논문은 `여기 <https://arxiv.org/pdf/1810.04805.pdf>`_
    에서 읽을 수 있습니다.
 
 -  PyTorch에서 지원하는 동적 양자화 기능은 부동소수점 모델의 가중치를 정적인
    int8 또는 float16 타입의 양자화된 모델로 변환하고, 활성 함수 부분은
-   동적으로 양자화합니다. 가중치가 int8 타입으로 양자화 됐을 때, 활성 함수 부분은
-   배치마다 int8 타입으로 동적으로 양자화 됩니다. PyTorch에는 지정된 모듈을
+   동적으로 양자화합니다. 가중치가 int8 타입으로 양자화됐을 때, 활성 함수 부분은
+   배치마다 int8 타입으로 동적으로 양자화됩니다. PyTorch에는 지정된 모듈을
    동적이면서 가중치만 갖도록 양자화된 형태로 변환하고, 양자화된 모델을 만들어내는
    `torch.quantization.quantize_dynamic API <https://pytorch.org/docs/stable/quantization.html#torch.quantization.quantize_dynamic>`_ 가 있습니다.
 
@@ -58,7 +58,7 @@ PyTorch 설치 안내와 `HuggingFace 깃허브 저장소 <https://github.com/hu
 .. code:: shell
 
    pip install sklearn
-   pip install transformers
+   pip install transformers==4.29.2
 
 
 PyTorch의 베타 기능들을 사용할 것이므로, 가장 최신 버전의 torch와 torchvision을 설치하는 것을 권해드립니다.
@@ -68,7 +68,7 @@ PyTorch의 베타 기능들을 사용할 것이므로, 가장 최신 버전의 t
 
 .. code:: shell
 
-   yes y | pip uninstall torch tochvision
+   yes y | pip uninstall torch torchvision
    yes y | pip install --pre torch -f https://download.pytorch.org/whl/nightly/cu101/torch_nightly.html
 
 
@@ -166,7 +166,7 @@ BERT 의 사상은 언어 표현을 사전학습하고, 문제에 특화된 매�
 가능한 적게 사용하면서도, 사전학습된 양방향 표현을 많은 문제들에 맞게
 미세조정하여 최고의 성능을 얻는 것입니다. 이 튜토리얼에서는 사전학습된
 BERT 모델을 MRPC 문제에 맞게 미세조정하여 의미적으로 동일한 문장을
-분류해보겠습니다.
+분류해 보겠습니다.
 
 사전학습된 BERT 모델(HuggingFace transformer들 중 ``bert-base-uncased`` 모델)을
 MRPC 문제에 맞게 미세조정하기 위해 `예시들 <https://github.com/huggingface/transformers/tree/master/examples#mrpc>`_
@@ -240,6 +240,7 @@ MRPC 문제를 위해 미세조정한 BERT 모델을 `여기 <https://download.p
     set_seed(42)
 
 
+
 2.2 미세조정한 BERT 모델 불러오기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -258,7 +259,7 @@ BERT 모델(FP32)를 불러옵니다.
 2.3 토큰화, 평가 함수 정의하기
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-`Huggingface <https://github.com/huggingface/transformers/blob/master/examples/run_glue.py>`_
+`HuggingFace <https://github.com/huggingface/transformers/blob/master/examples/run_glue.py>`_
 의 토큰화 함수와 평가 함수를 사용합니다.
 
 .. code:: python
@@ -432,7 +433,7 @@ HuggingFace BERT 모델에 동적 양자화를 적용하기 위해
 3.1 모델 크기 확인하기
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-먼저 모델 크기를 확인해보겠습니다. 보면, 모델 크기가 상당히 줄어든 것을
+먼저 모델 크기를 확인해 보겠습니다. 보면, 모델 크기가 상당히 줄어든 것을
 알 수 있습니다(FP32 형식의 모델 크기 : 438MB; INT8 형식의 모델 크기 : 181MB):
 
 .. code:: python
@@ -457,7 +458,7 @@ HuggingFace BERT 모델에 동적 양자화를 적용하기 위해
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 다음으로, 기존의 FP32 모델과 동적 양자화를 적용한 INT8 모델들의
-추론 속도와 정확도를 비교해보겟습니다.
+추론 속도와 정확도를 비교해 보겠습니다.
 
 .. code:: python
 
@@ -491,7 +492,7 @@ HuggingFace BERT 모델에 동적 양자화를 적용하기 위해
 MRPC 문제에 맞게 미세조정한 BERT 모델에 학습 후 동적 양자화를 적용한
 결과, 0.6% 낮은 F1 점수가 나왔습니다. 참고로, `최근 논문 <https://arxiv.org/pdf/1910.06188.pdf>`_
 (표 1)에서는 학습 후 동적 양자화를 적용했을 때, F1 점수 0.8788이 나왔고,
-양자화 의식 학습을 적용했을 때는 0.8956이 나왔습니다. 우리는 Pytorch의 비대칭
+양자화 의식 학습을 적용했을 때는 0.8956이 나왔습니다. 우리는 PyTorch의 비대칭
 양자화를 사용했지만, 참고한 논문에서는 대칭적 양자화만을 사용했다는 점이 주요한
 차이입니다.
 
@@ -513,6 +514,10 @@ MRPC 데이터셋을 평가하는데 약 46초가 소요됐습니다.
 나중에 다시 쓸 수 있도록 `torch.jit.save` 을 사용하여 양자화된 모델을 직렬화하고 저장할 수 있습니다.
 
 .. code:: python
+
+    def ids_tensor(shape, vocab_size):
+        #  Creates a random int32 tensor of the shape within the vocab size
+        return torch.randint(0, vocab_size, shape=shape, dtype=torch.int, device='cpu')
 
     input_ids = ids_tensor([8, 128], 2)
     token_type_ids = ids_tensor([8, 128], 2)

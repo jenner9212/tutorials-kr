@@ -6,60 +6,57 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="ko" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
-<meta property="og:title" content="PyTorch 소개" />
-  
+  <meta property="og:title" content="PyTorch 소개" />
 <meta property="og:type" content="article" />
-  
 <meta property="og:url" content="https://tutorials.pytorch.kr/beginner/introyt/introyt1_tutorial.html" />
-  
+<meta property="og:site_name" content="PyTorch Tutorials KR" />
 <meta property="og:description" content="Introduction|| Tensors|| Autograd|| Building Models|| TensorBoard Support|| Training Models|| Model Understanding 아래 영상이나 youtube 를 참고하세요. PyTorch Tensors: 03:50 에 시작하는 영상을 시청하세요. PyTorch를 import할 것입니다. 몇 가지 기본적인 tensor 조작을 알아보겠습니다. 처음으로, tensor들을 만드는 몇 가지 방법을 살펴보겠습니다: 위에서, 0으로 채워진 5x3 행렬을 만들고, 파..." />
-  
 <meta property="og:image" content="https://tutorials.pytorch.kr/_static/logos/logo-kr-sm-dark.png" />
-  
-<meta property="og:image:alt" content="PyTorch 소개" />
-  
+<meta property="og:image:alt" content="PyTorch Tutorials KR" />
+<meta name="description" content="Introduction|| Tensors|| Autograd|| Building Models|| TensorBoard Support|| Training Models|| Model Understanding 아래 영상이나 youtube 를 참고하세요. PyTorch Tensors: 03:50 에 시작하는 영상을 시청하세요. PyTorch를 import할 것입니다. 몇 가지 기본적인 tensor 조작을 알아보겠습니다. 처음으로, tensor들을 만드는 몇 가지 방법을 살펴보겠습니다: 위에서, 0으로 채워진 5x3 행렬을 만들고, 파..." />
 <meta property="og:ignore_canonical" content="true" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+
   <title>PyTorch 소개 &mdash; 파이토치 한국어 튜토리얼 (PyTorch tutorials in Korean)</title>
-  
 
-  
-  
+
+
+
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-  
-  
-  
 
-  
 
-  
-  
-    
 
-  
+
+
+
+
+
+
+
+
 
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> -->
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/katex-math.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" type="text/css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/custom2.css" type="text/css" />
     <link rel="index" title="색인" href="../../genindex.html" />
     <link rel="search" title="검색" href="../../search.html" />
-    <link rel="next" title="Introduction to PyTorch Tensors" href="tensors_deeper_tutorial.html" />
-    <link rel="prev" title="PyTorch 소개 - YouTube 시리즈" href="../introyt.html" /> 
+    <link rel="next" title="Pytorch Tensor 소개" href="tensors_deeper_tutorial.html" />
+    <link rel="prev" title="PyTorch 소개 - YouTube 시리즈" href="../introyt.html" />
 
-  
+
   <script src="../../_static/js/modernizr.min.js"></script>
 
   <!-- Preload the theme fonts -->
@@ -116,9 +113,9 @@
 
 <body class="pytorch-body">
 
-   
 
-    
+
+
 
     <div class="table-of-contents-link-wrapper">
       <span>Table of Contents</span>
@@ -129,21 +126,21 @@
       <div class="pytorch-side-scroll">
         <div class="pytorch-menu pytorch-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           <div class="pytorch-left-menu-search">
-            
 
-            
-              
-              
+
+
+
+
                 <div class="version">
-                  2.0.0+cu117
+                  2.3.1+cu121
                 </div>
-              
-            
-
-            
 
 
-  
+
+
+
+
+
 
 
 <div role="search">
@@ -154,15 +151,15 @@
   </form>
 </div>
 
-            
+
           </div>
 
-          
-            
-            
-              
-            
-            
+
+
+
+
+
+
               <p class="caption" role="heading"><span class="caption-text">파이토치(PyTorch) 레시피</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../recipes/recipes_index.html">모든 레시피 보기</a></li>
@@ -184,7 +181,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../introyt.html">PyTorch 소개 - YouTube 시리즈</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">PyTorch 소개</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tensors_deeper_tutorial.html">Introduction to PyTorch Tensors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tensors_deeper_tutorial.html">Pytorch Tensor 소개</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autogradyt_tutorial.html">The Fundamentals of Autograd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modelsyt_tutorial.html">Building Models with PyTorch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tensorboardyt_tutorial.html">PyTorch TensorBoard Support</a></li>
@@ -200,11 +197,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">이미지/비디오</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/torchvision_tutorial.html">TorchVision 객체 검출 미세조정(Finetuning) 튜토리얼</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/torchvision_tutorial.html">TorchVision Object Detection Finetuning Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../transfer_learning_tutorial.html">컴퓨터 비전(Vision)을 위한 전이학습(Transfer Learning)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../fgsm_tutorial.html">적대적 예제 생성(Adversarial Example Generation)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dcgan_faces_tutorial.html">DCGAN 튜토리얼</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../vt_tutorial.html">배포를 위한 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vt_tutorial.html">배포를 위해 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/tiatoolbox_tutorial.html">Whole Slide Image Classification Using PyTorch and TIAToolbox</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">오디오</span></p>
 <ul>
@@ -216,31 +214,43 @@
 <li class="toctree-l1"><a class="reference internal" href="../audio_datasets_tutorial.html">Audio Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/speech_recognition_pipeline_tutorial.html">Speech Recognition with Wav2Vec2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/text_to_speech_with_torchaudio.html">Text-to-speech with Tacotron2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/forced_alignment_with_torchaudio_tutorial.html">Forced Alignment with Wav2Vec2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/forced_alignment_with_torchaudio_tutorial.html">wav2vec2을 이용한 강제 정렬</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">텍스트</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../transformer_tutorial.html"><code class="docutils literal notranslate"><span class="pre">nn.Transformer</span></code> 와 torchtext로 시퀀스-투-시퀀스(Sequence-to-Sequence) 모델링하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../bettertransformer_tutorial.html">Fast Transformer Inference with Better Transformer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/char_rnn_classification_tutorial.html">기초부터 시작하는 NLP: 문자-단위 RNN으로 이름 분류하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/char_rnn_generation_tutorial.html">기초부터 시작하는 NLP:  문자-단위 RNN으로 이름 생성하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/seq2seq_translation_tutorial.html">기초부터 시작하는 NLP: Sequence to Sequence 네트워크와 Attention을 이용한 번역</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../text_sentiment_ngrams_tutorial.html">torchtext 라이브러리로 텍스트 분류하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../translation_transformer.html"><code class="docutils literal notranslate"><span class="pre">nn.Transformer</span></code> 와 torchtext로 언어 번역하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../torchtext_custom_dataset_tutorial.html">Preprocess custom text dataset using Torchtext</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">백엔드</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../onnx/intro_onnx.html">Introduction to ONNX</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">강화학습</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/reinforcement_q_learning.html">강화 학습 (DQN) 튜토리얼</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/reinforcement_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/mario_rl_tutorial.html">마리오 게임 RL 에이전트로 학습하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">PyTorch 모델을 프로덕션 환경에 배포하기</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../onnx/intro_onnx.html">Introduction to ONNX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/flask_rest_api_tutorial.html">Flask를 사용하여 Python에서 PyTorch를 REST API로 배포하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../Intro_to_TorchScript_tutorial.html">TorchScript 소개</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/cpp_export.html">C++에서 TorchScript 모델 로딩하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/super_resolution_with_onnxruntime.html">(선택) PyTorch 모델을 ONNX으로 변환하고 ONNX 런타임에서 실행하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/realtime_rpi.html">Raspberry Pi 4 에서 실시간 추론(Inference) (30fps!)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">PyTorch 프로파일링</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../profiler.html">PyTorch 모듈 프로파일링하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hta_intro_tutorial.html">Introduction to Holistic Trace Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hta_trace_diff_tutorial.html">Trace Diff using Holistic Trace Analysis</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Code Transforms with FX</span></p>
 <ul>
@@ -252,7 +262,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/memory_format_tutorial.html">(베타) PyTorch를 사용한 Channels Last 메모리 형식</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/forward_ad_usage.html">Forward-mode Automatic Differentiation (Beta)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/jacobians_hessians.html">Jacobians, Hessians, hvp, vhp, and more: composing function transforms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/ensembling.html">Model ensembling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/ensembling.html">모델 앙상블</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/per_sample_grads.html">Per-sample-gradients</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/cpp_frontend.html">PyTorch C++ 프론트엔드 사용하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/torch-script-parallelism.html">TorchScript의 동적 병렬 처리(Dynamic Parallelism)</a></li>
@@ -267,13 +277,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/torch_script_custom_classes.html">커스텀 C++ 클래스로 TorchScript 확장하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/dispatcher.html">Registering a Dispatched Operator in C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/extend_dispatcher.html">Extending dispatcher for a new backend in C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced/privateuseone.html">Facilitating New Backend Integration by PrivateUse1</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">모델 최적화</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../profiler.html">PyTorch 모듈 프로파일링 하기</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/tensorboard_profiler_tutorial.html">PyTorch Profiler With TensorBoard</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hyperparameter_tuning_tutorial.html">Ray Tune을 이용한 하이퍼파라미터 튜닝</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../vt_tutorial.html">배포를 위한 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../profiler.html">PyTorch 모듈 프로파일링하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/tensorboard_profiler_tutorial.html">텐서보드를 이용한 파이토치 프로파일러</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hyperparameter_tuning_tutorial.html">Ray Tune을 사용한 하이퍼파라미터 튜닝</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../vt_tutorial.html">배포를 위해 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/parametrizations.html">Parametrizations Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/pruning_tutorial.html">가지치기 기법(Pruning) 튜토리얼</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/dynamic_quantization_tutorial.html">(베타) LSTM 기반 단어 단위 언어 모델의 동적 양자화</a></li>
@@ -284,10 +295,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/torchserve_with_ipex_2.html">Grokking PyTorch Intel CPU performance from first principles (Part 2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/nvfuser_intro_tutorial.html">Getting Started - Accelerate Your Scripts with nvFuser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/ax_multiobjective_nas_tutorial.html">Multi-Objective NAS with Ax</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/torch_compile_tutorial.html">torch.compile Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/scaled_dot_product_attention_tutorial.html">(Beta) Implementing High-Performance Transformers with Scaled Dot Product Attention (SDPA)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/scaled_dot_product_attention_tutorial.html#using-sdpa-with-torch-compile">Using SDPA with <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/scaled_dot_product_attention_tutorial.html#conclusion">Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/torch_compile_tutorial.html">Introduction to <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/inductor_debug_cpu.html">Inductor CPU backend debugging and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/scaled_dot_product_attention_tutorial.html">(Beta) Scaled Dot Product Attention (SDPA)로 고성능 트랜스포머(Transformers) 구현하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/scaled_dot_product_attention_tutorial.html#torch-compile-sdpa"><code class="docutils literal notranslate"><span class="pre">torch.compile</span></code> 과 함께 SDPA 사용하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/scaled_dot_product_attention_tutorial.html#sdpa-atteition-bias">SDPA를 <code class="docutils literal notranslate"><span class="pre">atteition.bias</span></code> 하위 클래스와 사용하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/scaled_dot_product_attention_tutorial.html#id8">결론</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../knowledge_distillation_tutorial.html">Knowledge Distillation Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">병렬 및 분산 학습</span></p>
 <ul>
@@ -299,20 +313,24 @@
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/dist_tuto.html">PyTorch로 분산 어플리케이션 개발하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/FSDP_tutorial.html">Getting Started with Fully Sharded Data Parallel(FSDP)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/FSDP_adavnced_tutorial.html">Advanced Model Training with Fully Sharded Data Parallel (FSDP)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/process_group_cpp_extension_tutorial.html">Customize Process Group Backends Using Cpp Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/TP_tutorial.html">Large Scale Transformer model training with Tensor Parallel (TP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../intermediate/process_group_cpp_extension_tutorial.html">Cpp 확장을 사용한 프로세스 그룹 백엔드 사용자 정의</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/rpc_tutorial.html">Getting Started with Distributed RPC Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/rpc_param_server_tutorial.html">Implementing a Parameter Server Using Distributed RPC Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/dist_pipeline_parallel_tutorial.html">Distributed Pipeline Parallelism Using RPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../intermediate/rpc_async_execution.html">Implementing Batch RPC Processing Using Asynchronous Executions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/rpc_ddp_tutorial.html">분산 데이터 병렬(DDP)과 분산 RPC 프레임워크 결합</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../intermediate/pipeline_tutorial.html">파이프라인 병렬화로 트랜스포머 모델 학습시키기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/ddp_pipeline.html">분산 데이터 병렬 처리와 병렬 처리 파이프라인을 사용한 트랜스포머 모델 학습</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../advanced/generic_join.html">Distributed Training with Uneven Inputs Using the Join Context Manager</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">모바일</span></p>
+<p class="caption" role="heading"><span class="caption-text">Edge with ExecuTorch</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../deeplabv3_on_ios.html">iOS에서의 이미지 분할 DeepLapV3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../deeplabv3_on_android.html">안드로이드에서의 이미지 분할 DeepLapV3</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/tutorials/export-to-executorch-tutorial.html">Exporting to ExecuTorch Tutorial</a></li>
+<li class="toctree-l1"><a class="reference external" href=" https://pytorch.org/executorch/stable/running-a-model-cpp-tutorial.html">Running an ExecuTorch Model in C++ Tutorial</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/tutorials/sdk-integration-tutorial.html">Using the ExecuTorch SDK to Profile a Model</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/demo-apps-ios.html">Building an ExecuTorch iOS Demo App</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/demo-apps-android.html">Building an ExecuTorch Android Demo App</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/examples-end-to-end-to-lower-model-to-delegate.html">Lowering a Model as a Delegate</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">추천 시스템</span></p>
 <ul>
@@ -321,11 +339,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Multimodality</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../flava_finetuning_tutorial.html">TorchMultimodal Tutorial: Finetuning FLAVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flava_finetuning_tutorial.html">TorchMultimodal 튜토리얼: FLAVA 미세조정</a></li>
 </ul>
 
-            
-          
+
+
         </div>
       </div>
     </nav>
@@ -333,7 +351,7 @@
     <div class="pytorch-container">
       <div class="pytorch-page-level-bar" id="pytorch-page-level-bar">
         <div class="pytorch-breadcrumbs-wrapper">
-          
+
 
 
 
@@ -352,30 +370,30 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="pytorch-breadcrumbs">
-    
+
       <li>
         <a href="../../index.html">
-          
+
             Tutorials
-          
+
         </a> &gt;
       </li>
 
-        
+
       <li>PyTorch 소개</li>
-    
-    
+
+
       <li class="pytorch-breadcrumbs-aside">
-        
-            
+
+
             <a href="../../_sources/beginner/introyt/introyt1_tutorial.rst.txt" rel="nofollow"><img src="../../_static/images/view-page-source-icon.svg"></a>
-          
-        
+
+
       </li>
-    
+
   </ul>
 
-  
+
 </div>
         </div>
 
@@ -387,7 +405,7 @@
       <section data-toggle="wy-nav-shift" id="pytorch-content-wrap" class="pytorch-content-wrap">
         <div class="pytorch-content-left">
 
-        
+
 
           <div class="pytorch-call-to-action-links">
             <div id="tutorial-type">beginner/introyt/introyt1_tutorial</div>
@@ -409,14 +427,14 @@
             </div>
           </div>
 
-        
 
-          
+
+
           <div class="rst-content">
-          
+
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
-              
+
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">참고</p>
 <p>Click <a class="reference internal" href="#sphx-glr-download-beginner-introyt-introyt1-tutorial-py"><span class="std std-ref">here</span></a>
@@ -729,7 +747,7 @@ batch를 만듭니다.</p>
 
 <span class="n">transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span>
     <span class="p">[</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
-     <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">((</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))])</span>
+     <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">((</span><span class="mf">0.4914</span><span class="p">,</span> <span class="mf">0.4822</span><span class="p">,</span> <span class="mf">0.4465</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.2470</span><span class="p">,</span> <span class="mf">0.2435</span><span class="p">,</span> <span class="mf">0.2616</span><span class="p">))])</span>
 </pre></div>
 </div>
 <p>여기서는 입력에 대한 두 가지 변환을 지정합니다:</p>
@@ -737,13 +755,34 @@ batch를 만듭니다.</p>
 <li><p><a href="#id1"><span class="problematic" id="id2">``</span></a>transforms.ToTensor()``는 Pillow 패키지를 사용하여 불러온 이미지를
 PyTorch tensor 형태로 변환합니다.</p></li>
 <li><dl class="simple">
-<dt><code class="docutils literal notranslate"><span class="pre">transforms.Normalize()</span></code> 는 tensor의 평균이 0이고 표준 편차가 0.5가</dt><dd><p>되도록 tensor의 값을 조정합니다.
-대부분의 활성화 함수는 약 x=0에 강한 기울기 값을 가지고 있어 데이터를
+<dt><code class="docutils literal notranslate"><span class="pre">transforms.Normalize()</span></code> 는 tensor의 평균이 0이고 표준 편차가 1.0이</dt><dd><p>되도록 tensor의 값을 조정합니다.
+대부분의 활성화 함수는 x = 0 부근에서 강한 기울기 값을 가지고 있어 데이터를
 중앙으로 집중화하여 학습 속도를 높일 수 있습니다.</p>
 </dd>
 </dl>
 </li>
 </ul>
+<p>변환(trnasform)에 전달되는 값들은 각각 데이터셋에 있는 이미지들의 RGB 채널별
+평균값(mean)들(첫번째 튜플)과 표준편차(standard deviation)들(두번째 튜플)입니다.
+아래 몇 줄의 코드를 실행하여 직접 이 값을 계산해 볼 수 있습니다:</p>
+<blockquote>
+<div><dl>
+<dt><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a></dt><dd><p>from torch.utils.data import ConcatDataset
+transform = transforms.Compose([transforms.ToTensor()])
+trainset = torchvision.datasets.CIFAR10(root=〉./data〉, train=True,</p>
+<blockquote>
+<div><p>download=True, transform=transform)</p>
+</div></blockquote>
+<p>#stack all train images together into a tensor of shape
+#(50000, 3, 32, 32)
+x = torch.stack([sample[0] for sample in ConcatDataset([trainset])])</p>
+<p>#get the mean of each channel
+mean = torch.mean(x, dim=(0,2,3)) #tensor([0.4914, 0.4822, 0.4465])
+std = torch.std(x, dim=(0,2,3)) #tensor([0.2470, 0.2435, 0.2616])</p>
+</dd>
+</dl>
+<p><a href="#id7"><span class="problematic" id="id8">``</span></a><a href="#id9"><span class="problematic" id="id10">`</span></a></p>
+</div></blockquote>
 <p>transforms 는 cropping, centering, rotation, reflection를 포함하여 더 많은
 변환이 가능합니다.</p>
 <p>다음으로 CIFAR10 데이터셋의 인스턴스를 만듭니다. CIFAR10 데이터셋은 동물(새,
@@ -753,170 +792,7 @@ PyTorch tensor 형태로 변환합니다.</p></li>
                                         <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to ./data/cifar-10-python.tar.gz
-
-  0%|          | 0/170498071 [00:00&lt;?, ?it/s]
-  0%|          | 32768/170498071 [00:00&lt;16:47, 169226.66it/s]
-  0%|          | 65536/170498071 [00:00&lt;16:38, 170728.59it/s]
-  0%|          | 98304/170498071 [00:00&lt;16:18, 174159.59it/s]
-  0%|          | 229376/170498071 [00:00&lt;07:32, 376621.72it/s]
-  0%|          | 458752/170498071 [00:00&lt;04:11, 675343.96it/s]
-  1%|          | 917504/170498071 [00:01&lt;02:13, 1272083.39it/s]
-  1%|          | 1605632/170498071 [00:01&lt;01:10, 2397948.51it/s]
-  1%|1         | 1933312/170498071 [00:01&lt;01:06, 2553380.48it/s]
-  1%|1         | 2555904/170498071 [00:01&lt;00:49, 3397389.53it/s]
-  2%|1         | 2981888/170498071 [00:01&lt;00:46, 3602614.98it/s]
-  2%|2         | 3571712/170498071 [00:01&lt;00:39, 4181984.51it/s]
-  2%|2         | 4063232/170498071 [00:01&lt;00:37, 4381421.66it/s]
-  3%|2         | 4685824/170498071 [00:01&lt;00:34, 4855559.01it/s]
-  3%|3         | 5242880/170498071 [00:01&lt;00:33, 4985168.95it/s]
-  3%|3         | 5865472/170498071 [00:02&lt;00:30, 5336985.88it/s]
-  4%|3         | 6455296/170498071 [00:02&lt;00:30, 5438426.45it/s]
-  4%|4         | 7110656/170498071 [00:02&lt;00:28, 5650559.07it/s]
-  5%|4         | 7766016/170498071 [00:02&lt;00:27, 5878068.90it/s]
-  5%|4         | 8421376/170498071 [00:02&lt;00:26, 6006628.45it/s]
-  5%|5         | 9142272/170498071 [00:02&lt;00:25, 6315993.46it/s]
-  6%|5         | 9797632/170498071 [00:02&lt;00:25, 6363088.63it/s]
-  6%|6         | 10551296/170498071 [00:02&lt;00:24, 6661254.45it/s]
-  7%|6         | 11272192/170498071 [00:02&lt;00:23, 6727694.38it/s]
-  7%|7         | 12025856/170498071 [00:02&lt;00:22, 6959837.40it/s]
-  7%|7         | 12779520/170498071 [00:03&lt;00:22, 7107478.50it/s]
-  8%|7         | 13565952/170498071 [00:03&lt;00:21, 7295289.67it/s]
-  8%|8         | 14385152/170498071 [00:03&lt;00:20, 7530979.69it/s]
-  9%|8         | 15237120/170498071 [00:03&lt;00:20, 7748197.12it/s]
-  9%|9         | 16089088/170498071 [00:03&lt;00:19, 7926281.80it/s]
- 10%|9         | 16941056/170498071 [00:03&lt;00:18, 8088186.97it/s]
- 10%|#         | 17858560/170498071 [00:03&lt;00:18, 8381935.80it/s]
- 11%|#1        | 18776064/170498071 [00:03&lt;00:17, 8548195.70it/s]
- 12%|#1        | 19759104/170498071 [00:03&lt;00:17, 8864770.89it/s]
- 12%|#2        | 20709376/170498071 [00:04&lt;00:16, 9019982.90it/s]
- 13%|#2        | 21626880/170498071 [00:04&lt;00:16, 8954610.79it/s]
- 13%|#3        | 22740992/170498071 [00:04&lt;00:15, 9598808.36it/s]
- 14%|#3        | 23724032/170498071 [00:04&lt;00:15, 9537132.19it/s]
- 15%|#4        | 24870912/170498071 [00:04&lt;00:14, 10047930.87it/s]
- 15%|#5        | 25886720/170498071 [00:04&lt;00:14, 10058898.79it/s]
- 16%|#5        | 27066368/170498071 [00:04&lt;00:13, 10529964.09it/s]
- 17%|#6        | 28180480/170498071 [00:04&lt;00:13, 10699239.06it/s]
- 17%|#7        | 29425664/170498071 [00:04&lt;00:12, 11097252.37it/s]
- 18%|#7        | 30539776/170498071 [00:04&lt;00:12, 11038800.07it/s]
- 19%|#8        | 31850496/170498071 [00:05&lt;00:11, 11605883.84it/s]
- 19%|#9        | 33095680/170498071 [00:05&lt;00:11, 11793059.52it/s]
- 20%|##        | 34471936/170498071 [00:05&lt;00:11, 12329657.31it/s]
- 21%|##        | 35717120/170498071 [00:05&lt;00:10, 12306710.37it/s]
- 22%|##1       | 37060608/170498071 [00:05&lt;00:10, 12595558.89it/s]
- 23%|##2       | 38502400/170498071 [00:05&lt;00:10, 13090932.17it/s]
- 23%|##3       | 39813120/170498071 [00:05&lt;00:10, 12936636.01it/s]
- 24%|##4       | 41222144/170498071 [00:05&lt;00:09, 13251469.49it/s]
- 25%|##5       | 42663936/170498071 [00:05&lt;00:09, 13546155.20it/s]
- 26%|##5       | 44072960/170498071 [00:05&lt;00:09, 13699100.19it/s]
- 27%|##6       | 45481984/170498071 [00:06&lt;00:09, 13734612.09it/s]
- 28%|##7       | 46923776/170498071 [00:06&lt;00:08, 13899808.50it/s]
- 28%|##8       | 48332800/170498071 [00:06&lt;00:08, 13877407.13it/s]
- 29%|##9       | 49774592/170498071 [00:06&lt;00:08, 14011678.17it/s]
- 30%|###       | 51183616/170498071 [00:06&lt;00:08, 13867919.00it/s]
- 31%|###       | 52592640/170498071 [00:06&lt;00:08, 13874611.89it/s]
- 32%|###1      | 54001664/170498071 [00:06&lt;00:08, 13896211.53it/s]
- 32%|###2      | 55410688/170498071 [00:06&lt;00:08, 13850303.12it/s]
- 33%|###3      | 56819712/170498071 [00:06&lt;00:08, 13829250.94it/s]
- 34%|###4      | 58327040/170498071 [00:06&lt;00:07, 14153147.15it/s]
- 35%|###5      | 59768832/170498071 [00:07&lt;00:07, 14105864.25it/s]
- 36%|###5      | 61210624/170498071 [00:07&lt;00:07, 14035480.75it/s]
- 37%|###6      | 62619648/170498071 [00:07&lt;00:07, 14015453.28it/s]
- 38%|###7      | 64028672/170498071 [00:07&lt;00:07, 13863434.17it/s]
- 38%|###8      | 65470464/170498071 [00:07&lt;00:07, 13996747.66it/s]
- 39%|###9      | 66879488/170498071 [00:07&lt;00:07, 13873924.00it/s]
- 40%|####      | 68321280/170498071 [00:07&lt;00:07, 13983402.69it/s]
- 41%|####      | 69730304/170498071 [00:07&lt;00:07, 13961401.93it/s]
- 42%|####1     | 71172096/170498071 [00:07&lt;00:07, 14028139.54it/s]
- 43%|####2     | 72581120/170498071 [00:07&lt;00:06, 14038695.02it/s]
- 43%|####3     | 73990144/170498071 [00:08&lt;00:06, 13968353.32it/s]
- 44%|####4     | 75399168/170498071 [00:08&lt;00:06, 13971324.14it/s]
- 45%|####5     | 76808192/170498071 [00:08&lt;00:07, 13231247.51it/s]
- 46%|####5     | 78151680/170498071 [00:08&lt;00:07, 12954809.53it/s]
- 47%|####6     | 79527936/170498071 [00:08&lt;00:06, 13072721.20it/s]
- 47%|####7     | 80871424/170498071 [00:08&lt;00:06, 13109062.32it/s]
- 48%|####8     | 82247680/170498071 [00:08&lt;00:06, 13245069.43it/s]
- 49%|####9     | 83591168/170498071 [00:08&lt;00:06, 13249850.42it/s]
- 50%|####9     | 85000192/170498071 [00:08&lt;00:06, 13440990.59it/s]
- 51%|#####     | 86376448/170498071 [00:09&lt;00:06, 13406867.28it/s]
- 51%|#####1    | 87752704/170498071 [00:09&lt;00:06, 13453785.08it/s]
- 52%|#####2    | 89128960/170498071 [00:09&lt;00:06, 13543112.06it/s]
- 53%|#####3    | 90505216/170498071 [00:09&lt;00:05, 13527909.42it/s]
- 54%|#####3    | 91914240/170498071 [00:09&lt;00:05, 13586262.20it/s]
- 55%|#####4    | 93290496/170498071 [00:09&lt;00:05, 13580948.57it/s]
- 56%|#####5    | 94666752/170498071 [00:09&lt;00:05, 13528670.65it/s]
- 56%|#####6    | 96043008/170498071 [00:09&lt;00:05, 13412060.82it/s]
- 57%|#####7    | 97386496/170498071 [00:09&lt;00:05, 13316787.03it/s]
- 58%|#####7    | 98729984/170498071 [00:09&lt;00:05, 13044381.77it/s]
- 59%|#####8    | 100040704/170498071 [00:10&lt;00:05, 12905326.36it/s]
- 59%|#####9    | 101351424/170498071 [00:10&lt;00:05, 12860582.87it/s]
- 60%|######    | 102662144/170498071 [00:10&lt;00:05, 12763799.39it/s]
- 61%|######    | 103940096/170498071 [00:10&lt;00:05, 12581873.87it/s]
- 62%|######1   | 105218048/170498071 [00:10&lt;00:05, 12368801.31it/s]
- 62%|######2   | 106496000/170498071 [00:10&lt;00:05, 12378821.51it/s]
- 63%|######3   | 107741184/170498071 [00:10&lt;00:05, 12354976.00it/s]
- 64%|######3   | 109019136/170498071 [00:10&lt;00:04, 12465703.50it/s]
- 65%|######4   | 110297088/170498071 [00:10&lt;00:04, 12448081.93it/s]
- 65%|######5   | 111542272/170498071 [00:10&lt;00:04, 12424186.35it/s]
- 66%|######6   | 112820224/170498071 [00:11&lt;00:04, 12505191.12it/s]
- 67%|######6   | 114098176/170498071 [00:11&lt;00:04, 12441580.95it/s]
- 68%|######7   | 115343360/170498071 [00:11&lt;00:04, 12405193.08it/s]
- 68%|######8   | 116588544/170498071 [00:11&lt;00:04, 12328533.44it/s]
- 69%|######9   | 117833728/170498071 [00:11&lt;00:04, 12336529.74it/s]
- 70%|######9   | 119078912/170498071 [00:11&lt;00:04, 12332929.85it/s]
- 71%|#######   | 120324096/170498071 [00:11&lt;00:04, 12019645.65it/s]
- 71%|#######1  | 121536512/170498071 [00:11&lt;00:04, 11624003.25it/s]
- 72%|#######1  | 122716160/170498071 [00:11&lt;00:04, 11424950.14it/s]
- 73%|#######2  | 123863040/170498071 [00:12&lt;00:04, 11197548.54it/s]
- 73%|#######3  | 125009920/170498071 [00:12&lt;00:04, 11082646.72it/s]
- 74%|#######3  | 126124032/170498071 [00:12&lt;00:04, 11077271.24it/s]
- 75%|#######4  | 127238144/170498071 [00:12&lt;00:03, 10826039.54it/s]
- 75%|#######5  | 128352256/170498071 [00:12&lt;00:04, 10452100.40it/s]
- 76%|#######5  | 129433600/170498071 [00:12&lt;00:03, 10485772.13it/s]
- 77%|#######6  | 130514944/170498071 [00:12&lt;00:03, 10504413.53it/s]
- 77%|#######7  | 131596288/170498071 [00:12&lt;00:03, 10403654.86it/s]
- 78%|#######7  | 132644864/170498071 [00:12&lt;00:03, 10309736.84it/s]
- 78%|#######8  | 133693440/170498071 [00:12&lt;00:03, 10228919.89it/s]
- 79%|#######9  | 134742016/170498071 [00:13&lt;00:03, 9980350.26it/s]
- 80%|#######9  | 135757824/170498071 [00:13&lt;00:03, 9831249.88it/s]
- 80%|########  | 136773632/170498071 [00:13&lt;00:03, 9676388.00it/s]
- 81%|########  | 137756672/170498071 [00:13&lt;00:03, 9615035.07it/s]
- 81%|########1 | 138739712/170498071 [00:13&lt;00:03, 9623091.95it/s]
- 82%|########1 | 139722752/170498071 [00:13&lt;00:03, 9510681.29it/s]
- 83%|########2 | 140705792/170498071 [00:13&lt;00:03, 9532585.61it/s]
- 83%|########3 | 141721600/170498071 [00:13&lt;00:02, 9607339.02it/s]
- 84%|########3 | 142704640/170498071 [00:13&lt;00:02, 9496114.87it/s]
- 84%|########4 | 143654912/170498071 [00:14&lt;00:02, 9496089.53it/s]
- 85%|########4 | 144605184/170498071 [00:14&lt;00:02, 9457727.40it/s]
- 85%|########5 | 145555456/170498071 [00:14&lt;00:02, 9359704.69it/s]
- 86%|########5 | 146505728/170498071 [00:14&lt;00:02, 9099621.02it/s]
- 86%|########6 | 147423232/170498071 [00:14&lt;00:02, 9119129.02it/s]
- 87%|########7 | 148340736/170498071 [00:14&lt;00:02, 9022738.67it/s]
- 88%|########7 | 149258240/170498071 [00:14&lt;00:02, 8958729.09it/s]
- 88%|########8 | 150175744/170498071 [00:14&lt;00:02, 8996793.55it/s]
- 89%|########8 | 151093248/170498071 [00:14&lt;00:02, 9020883.93it/s]
- 89%|########9 | 152010752/170498071 [00:14&lt;00:02, 9018443.03it/s]
- 90%|########9 | 152928256/170498071 [00:15&lt;00:01, 8819558.76it/s]
- 90%|######### | 153845760/170498071 [00:15&lt;00:01, 8856259.60it/s]
- 91%|######### | 154763264/170498071 [00:15&lt;00:01, 8916482.77it/s]
- 91%|#########1| 155713536/170498071 [00:15&lt;00:01, 9033250.62it/s]
- 92%|#########1| 156631040/170498071 [00:15&lt;00:01, 8941471.66it/s]
- 92%|#########2| 157548544/170498071 [00:15&lt;00:01, 8998757.25it/s]
- 93%|#########2| 158466048/170498071 [00:15&lt;00:01, 8996117.01it/s]
- 94%|#########3| 159416320/170498071 [00:15&lt;00:01, 9067530.92it/s]
- 94%|#########4| 160333824/170498071 [00:15&lt;00:01, 9016728.20it/s]
- 95%|#########4| 161251328/170498071 [00:15&lt;00:01, 9002324.46it/s]
- 95%|#########5| 162201600/170498071 [00:16&lt;00:00, 9079578.21it/s]
- 96%|#########5| 163151872/170498071 [00:16&lt;00:00, 9155219.18it/s]
- 96%|#########6| 164069376/170498071 [00:16&lt;00:00, 9013123.52it/s]
- 97%|#########6| 164986880/170498071 [00:16&lt;00:00, 9037765.10it/s]
- 97%|#########7| 165937152/170498071 [00:16&lt;00:00, 9114346.45it/s]
- 98%|#########7| 166887424/170498071 [00:16&lt;00:00, 9168831.14it/s]
- 98%|#########8| 167804928/170498071 [00:16&lt;00:00, 9048701.00it/s]
- 99%|#########8| 168722432/170498071 [00:16&lt;00:00, 9067822.07it/s]
- 99%|#########9| 169639936/170498071 [00:16&lt;00:00, 9049549.67it/s]
-100%|##########| 170498071/170498071 [00:17&lt;00:00, 10023038.32it/s]
-Extracting ./data/cifar-10-python.tar.gz to ./data
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Files already downloaded and verified
 </pre></div>
 </div>
 <p>PyTorch에서 데이터셋 객체를 만드는 예제입니다. 다운로드 가능한 데이터셋
@@ -933,7 +809,7 @@ PyTorch의 <code class="docutils literal notranslate"><span class="pre">Dataset<
 <li><p>데이터셋을 다운로드할지에 대한 여부를 확인합니다.</p></li>
 <li><p>데이터에 적용하려는 변환 객체를 넣어줍니다.</p></li>
 </ul>
-<p>데이터셋 다운로드가 끝나면 <a href="#id3"><span class="problematic" id="id4">``</span></a>DataLoader``에 사용할 수 있습니다:</p>
+<p>데이터셋 다운로드가 끝나면 <a href="#id11"><span class="problematic" id="id12">``</span></a>DataLoader``에 사용할 수 있습니다:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">trainloader</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">(</span><span class="n">trainset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
                                           <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
@@ -974,8 +850,8 @@ batch 이미지를 <code class="docutils literal notranslate"><span class="pre">
 <p>위 셀 스크립트를 실행하면 4개의 이미지와 각 이미지에 대한 정답 label이
 출력됩니다.</p>
 </div>
-<div class="section" id="id5">
-<h2>PyTorch 모델 학습<a class="headerlink" href="#id5" title="이 제목에 대한 퍼머링크">¶</a></h2>
+<div class="section" id="id13">
+<h2>PyTorch 모델 학습<a class="headerlink" href="#id13" title="이 제목에 대한 퍼머링크">¶</a></h2>
 <p><a class="reference external" href="https://www.youtube.com/watch?v=IC0_FRiX-sw&amp;t=1030s">17:10</a> 에 시작하는
 영상을 참고하세요.</p>
 <p>위에서 다뤘던 내용들을 종합하여 모델을 학습시키겠습니다:</p>
@@ -1079,7 +955,7 @@ Files already downloaded and verified
 나는지를 표현하는 지표입니다. Cross-entropy 손실 함수는 일반적인 분류 모델의
 전형적인 손실 함수입니다.</p>
 <p><strong>optimizer</strong> 는 학습의 필수요소입니다. 아래 예제에서 간단한 최적화 알고리즘인
-<em>stochastic gradient descent</em> 를 구현하겠습니다. SGD 알고리짐은 학습 속도인
+<em>stochastic gradient descent</em> 를 구현하겠습니다. SGD 알고리즘은 학습 속도인
 (<code class="docutils literal notranslate"><span class="pre">lr</span></code>) 및 momentum 과 같은 매개 변수 외에도 모델의 모든 학습 가중치 값인
 <code class="docutils literal notranslate"><span class="pre">net.parameters()</span></code> 를 전달하는데, 이 함수는 최적화를 위해 파라미터를 조정합니다.</p>
 <p>마지막으로, 모든 것이 학습 loop에 들어갑니다. 이제 아래 셀을 실행하세요.
@@ -1111,17 +987,17 @@ Files already downloaded and verified
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[1,  2000] loss: 2.195
-[1,  4000] loss: 1.876
-[1,  6000] loss: 1.655
+[1,  4000] loss: 1.879
+[1,  6000] loss: 1.656
 [1,  8000] loss: 1.576
-[1, 10000] loss: 1.519
-[1, 12000] loss: 1.466
-[2,  2000] loss: 1.421
-[2,  4000] loss: 1.376
-[2,  6000] loss: 1.336
-[2,  8000] loss: 1.335
-[2, 10000] loss: 1.326
-[2, 12000] loss: 1.270
+[1, 10000] loss: 1.517
+[1, 12000] loss: 1.461
+[2,  2000] loss: 1.415
+[2,  4000] loss: 1.368
+[2,  6000] loss: 1.334
+[2,  8000] loss: 1.327
+[2, 10000] loss: 1.318
+[2, 12000] loss: 1.261
 Finished Training
 </pre></div>
 </div>
@@ -1138,20 +1014,20 @@ Finished Training
 <p>15번째 라인에서는 학습 단계의 최적화를 수행하는데 <code class="docutils literal notranslate"><span class="pre">backward()</span></code>
 를 통해 손실 값을 줄일 수 있는 방향으로 학습 가중치들을 조정합니다.</p>
 <p>루프의 나머지 부분은 epoch 횟수, 학습 루프를 통해 수집된 손실 값을 출력합니다.</p>
-<p><strong>위 셀을 실행한다면</strong> 다음과 같은 값이 표시됩니다:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">2000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">2.235</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">4000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.940</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">6000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.713</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span>  <span class="mi">8000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.573</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.507</span>
-<span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">12000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.442</span>
-<span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">2000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.378</span>
-<span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">4000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.364</span>
-<span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">6000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.349</span>
-<span class="p">[</span><span class="mi">2</span><span class="p">,</span>  <span class="mi">8000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.319</span>
-<span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.284</span>
-<span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">12000</span><span class="p">]</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">1.267</span>
-<span class="n">Finished</span> <span class="n">Training</span>
+<p><strong>위 셀을 실행하면</strong> 다음과 같은 출력이 나타날 것입니다:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="o">[</span><span class="m">1</span>,<span class="w">  </span><span class="m">2000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">2</span>.235
+<span class="o">[</span><span class="m">1</span>,<span class="w">  </span><span class="m">4000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.940
+<span class="o">[</span><span class="m">1</span>,<span class="w">  </span><span class="m">6000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.713
+<span class="o">[</span><span class="m">1</span>,<span class="w">  </span><span class="m">8000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.573
+<span class="o">[</span><span class="m">1</span>,<span class="w"> </span><span class="m">10000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.507
+<span class="o">[</span><span class="m">1</span>,<span class="w"> </span><span class="m">12000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.442
+<span class="o">[</span><span class="m">2</span>,<span class="w">  </span><span class="m">2000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.378
+<span class="o">[</span><span class="m">2</span>,<span class="w">  </span><span class="m">4000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.364
+<span class="o">[</span><span class="m">2</span>,<span class="w">  </span><span class="m">6000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.349
+<span class="o">[</span><span class="m">2</span>,<span class="w">  </span><span class="m">8000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.319
+<span class="o">[</span><span class="m">2</span>,<span class="w"> </span><span class="m">10000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.284
+<span class="o">[</span><span class="m">2</span>,<span class="w"> </span><span class="m">12000</span><span class="o">]</span><span class="w"> </span>loss:<span class="w"> </span><span class="m">1</span>.267
+Finished<span class="w"> </span>Training
 </pre></div>
 </div>
 <p>손실 값은 단조롭게 감소하며, 이는 모델이 훈련 데이터셋에서 성능을
@@ -1185,7 +1061,7 @@ Finished Training
 수 있습니다. 이것은 정확히 최신 기술은 아니지만, 무작위 결과에서 기대할 수
 있는 정확도 보다 10% 정도 좋은 결과를 보여줍니다. 이 결과는 모델에서
 일반적인 학습이 발생했음을 보여줍니다.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  2.878 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  52.406 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-beginner-introyt-introyt1-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/0e4c2becda3dfc54e1816634d49f8e73/introyt1_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">introyt1_tutorial.py</span></code></a></p>
@@ -1200,21 +1076,21 @@ Finished Training
 
 
              </article>
-             
+
             </div>
             <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="tensors_deeper_tutorial.html" class="btn btn-neutral float-right" title="Introduction to PyTorch Tensors" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
-      
-      
-        <a href="../introyt.html" class="btn btn-neutral" title="PyTorch 소개 - YouTube 시리즈" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
-      
-    </div>
-  
 
-  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+
+        <a href="tensors_deeper_tutorial.html" class="btn btn-neutral float-right" title="Pytorch Tensor 소개" accesskey="n" rel="next">Next <img src="../../_static/images/chevron-right-orange.svg" class="next-page"></a>
+
+
+        <a href="../introyt.html" class="btn btn-neutral" title="PyTorch 소개 - YouTube 시리즈" accesskey="p" rel="prev"><img src="../../_static/images/chevron-right-orange.svg" class="previous-page"> Previous</a>
+
+    </div>
+
+
+
     <hr class="community-hr hr-top" />
     <div class="community-container">
       <div class="community-prompt">더 궁금하시거나 개선할 내용이 있으신가요? 커뮤니티에 참여해보세요!</div>
@@ -1234,19 +1110,19 @@ Finished Training
       </div>
     </div>
     <hr class="rating-hr hr-bottom"/>
-  
+
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2023, PyTorch &amp; 파이토치 한국 사용자 모임(PyTorch Korea User Group).
+        &copy; Copyright 2018-2024, PyTorch &amp; 파이토치 한국 사용자 모임(PyTorch Korea User Group).
 
     </p>
   </div>
-    
+
       <div>
         Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
       </div>
-     
+
 
 </footer>
 
@@ -1268,7 +1144,7 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
 <li><a class="reference internal" href="#pytorch-tensors">PyTorch Tensors</a></li>
 <li><a class="reference internal" href="#pytorch-models">PyTorch Models</a></li>
 <li><a class="reference internal" href="#datasets-dataloaders">Datasets 및 Dataloaders</a></li>
-<li><a class="reference internal" href="#id5">PyTorch 모델 학습</a></li>
+<li><a class="reference internal" href="#id13">PyTorch 모델 학습</a></li>
 </ul>
 </li>
 </ul>
@@ -1279,12 +1155,12 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
       </section>
     </div>
 
-  
 
 
-  
-  
-     
+
+
+
+
        <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
          <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
          <script src="../../_static/jquery.js"></script>
@@ -1294,12 +1170,12 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
          <script src="../../_static/clipboard.min.js"></script>
          <script src="../../_static/copybutton.js"></script>
          <script src="../../_static/translations.js"></script>
-         <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
-         <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+         <script src="../../_static/katex.min.js"></script>
+         <script src="../../_static/auto-render.min.js"></script>
          <script src="../../_static/katex_autorenderer.js"></script>
          <script src="../../_static/design-tabs.js"></script>
-     
-  
+
+
 
   <script type="text/javascript" src="../../_static/js/vendor/popper.min.js"></script>
   <script type="text/javascript" src="../../_static/js/vendor/bootstrap.min.js"></script>
@@ -1311,10 +1187,12 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
- 
-<script>
-//add microsoft link
 
+<script>
+// Helper function to make it easier to call dataLayer.push()
+function gtag(){window.dataLayer.push(arguments);}
+
+//add microsoft link
 if(window.location.href.indexOf("/beginner/basics/")!= -1)
 {
   var url="https://docs.microsoft.com/learn/paths/pytorch-fundamentals/?wt.mc_id=aiml-7486-cxa";
@@ -1350,7 +1228,7 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
 </script>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LZRD6GXDLF"></script>
-<script>
+<script data-cfasync="false">
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
@@ -1359,7 +1237,7 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
 </script>
 
 
-<script>
+<script data-cfasync="false">
   $("[data-behavior='call-to-action-event']").on('click', function(){
     ga('send', {
       hitType: 'event',
@@ -1379,7 +1257,8 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
     gtag('event', 'click', {
       'event_category': 'Tutorial Rating',
       'event_label': $("h1").first().text(),
-      'value': $(this).attr("data-count")
+      'value': $(this).attr("data-count"),
+      'customEvent:Rating': $(this).attr("data-count") // send to GA custom dimension customEvent:Rating.
     });
    });
 
@@ -1390,7 +1269,7 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
 </script>
 
 <script type="text/javascript">
-  var collapsedSections = ['파이토치(PyTorch) 레시피', '파이토치(PyTorch) 배우기', '이미지/비디오', '오디오', '텍스트', '강화학습', 'PyTorch 모델을 프로덕션 환경에 배포하기', 'Code Transforms with FX', '프론트엔드 API', 'PyTorch 확장하기', '모델 최적화', '병렬 및 분산 학습', '모바일', 'Introduction to PyTorch on YouTube', '추천 시스템', 'Multimodality'];
+  var collapsedSections = ['파이토치(PyTorch) 레시피', '파이토치(PyTorch) 배우기', 'Introduction to PyTorch on YouTube', '이미지/비디오', '오디오', '텍스트', '백엔드', '강화학습', 'PyTorch 모델을 프로덕션 환경에 배포하기', 'PyTorch 프로파일링', 'Code Transforms with FX', '프론트엔드 API', 'PyTorch 확장하기', '모델 최적화', '병렬 및 분산 학습', 'Edge with ExecuTorch', '추천 시스템', 'Multimodality'];
 </script>
 
 

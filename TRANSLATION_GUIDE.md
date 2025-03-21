@@ -45,6 +45,7 @@
 |영문|한글|작성자|추가 설명|
 |---|---|:---:|---|
 |Acknowledgements|감사의 말|박정환||
+|activation|활성화|조형서||
 |API endpoint|API 엔드포인트|박정환|음차 표기|
 |argument|인자|박정환||
 |Audio|오디오|박정환|ToC의 분류명입니다.|
@@ -52,21 +53,26 @@
 |autograd|Autograd|황성수|번역안함|
 |Batch Normalization|배치 정규화|박정환||
 |bias|편향|이하람||
+|CUDA|CUDA|박지은|번역안함|
 |convolution|합성곱|김현길||
 |Dropout|드롭아웃|김태형|음차 표기|
 |dataset|데이터셋|박정환|음차 표기|
 |deep neural network|심층 신경망|박정환||
 |derivative|도함수|박정환||
 |Drop-out|Drop-out|황성수|번역안함|
+|embedding|임베딩|하동훈|음차 표기|
 |epoch|에폭|박정환|음차 표기|
 |evaluation mode|평가 모드|박정환||
+|Fine-tuning|미세 조정|오왕택||
 |feature|특징|백선희||
 |feed data through model|데이터를 모델에 제공|||
 |Feed-forward network|순전파 신경망|박정환||
+|freezing|동결|김지호||
 |Generative|생성 모델|박정환|ToC의 분류명입니다.|
 |Getting Started tutorial|시작하기 튜토리얼|박정환|ToC의 Getting Started를 뜻합니다.|
 |gradient|변화도|박정환||
 |Hyperparameter|하이퍼파라미터|김태영|음차 표기|
+|inference|추론|박지은||
 |Image|이미지|박정환|ToC의 분류명입니다.|
 |in-place|제자리|허남규||
 |initialization|초기화|김지호||

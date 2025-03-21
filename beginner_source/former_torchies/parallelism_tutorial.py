@@ -3,7 +3,7 @@
 멀티-GPU 예제
 ==================
 
-데이터 병렬 처리(Data Parallelism)는 미니-배치를 여러 개의 더 작은 미니-배치로
+데이터 병렬 처리(Data Parallelism)는 미니배치를 여러 개의 더 작은 미니배치로
 자르고 각각의 작은 미니배치를 병렬적으로 연산하는 것입니다.
 
 데이터 병렬 처리는 ``torch.nn.DataParallel`` 을 사용하여 구현합니다.
@@ -52,7 +52,10 @@ class DataParallelModel(nn.Module):
 
 class MyDataParallel(nn.DataParallel):
     def __getattr__(self, name):
-        return getattr(self.module, name)
+        try:
+            return super().__getattr__(name)
+        except AttributeError:
+            return getattr(self.module, name)
 
 ########################################################################
 # **DataParallel이 구현된 기본형(Primitive):**

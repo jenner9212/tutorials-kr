@@ -4,8 +4,8 @@
 사용자 정의 Dataset, Dataloader, Transforms 작성하기
 ==========================================================
 
-**저자** : Sasank Chilamkurthy <https://chsasank.github.io>
-**번역** : 정윤성 <https://github.com/Yunseong-Jeong>
+**저자** : `Sasank Chilamkurthy <https://chsasank.github.io>`__
+**번역** : `정윤성 <https://github.com/Yunseong-Jeong>`__, `박정환 <http://github.com/9bow>`__
 
 머신러닝 문제를 푸는 과정에서 데이터를 준비하는데 많은 노력이 필요합니다.
 PyTorch는 데이터를 불러오는 과정을 쉽게해주고, 또 잘 사용한다면 코드의 가독성도 보다 높여줄 수 있는 도구들을
@@ -20,7 +20,6 @@ PyTorch는 데이터를 불러오는 과정을 쉽게해주고, 또 잘 사용�
 
 """
 
-from __future__ import print_function, division
 import os
 import torch
 import pandas as pd
@@ -44,7 +43,7 @@ plt.ion()   # 반응형 모드
 # .. figure:: /_static/img/landmarked_face2.png
 #    :width: 400
 #
-# 각각의 얼굴에 68개의 서로다른 중요 포인트들이 존재합니다.
+# 각각의 얼굴에 68개의 서로 다른 중요 포인트들이 존재합니다.
 #
 # .. note::
 #     이 `링크 <https://download.pytorch.org/tutorial/faces.zip>`_ 를 통해 데이터셋을 다운로드 해주세요.
@@ -54,9 +53,9 @@ plt.ion()   # 반응형 모드
 #     적용한 데이터셋입니다.
 #
 #
-# 데이터셋은 아래와 같은 특징을 가진 CSV 파일이 포함되어 있습니다.
+# 데이터셋은 아래와 같은 식으로 작성된 ``.csv`` 파일에 포함되어 있습니다:
 #
-# ::
+# .. code-block:: sh
 #
 #     image_name,part_0_x,part_0_y,part_1_x,part_1_y,part_2_x, ... ,part_67_x,part_67_y
 #     0805personali01.jpg,27,83,27,98, ... 84,134
@@ -71,8 +70,7 @@ landmarks_frame = pd.read_csv('data/faces/face_landmarks.csv')
 n = 65
 img_name = landmarks_frame.iloc[n, 0]
 landmarks = landmarks_frame.iloc[n, 1:]
-landmarks = np.asarray(landmarks)
-landmarks = landmarks.astype('float').reshape(-1, 2)
+landmarks = np.asarray(landmarks, dtype=float).reshape(-1, 2)
 
 print('Image name: {}'.format(img_name))
 print('Landmarks shape: {}'.format(landmarks.shape))
@@ -104,7 +102,7 @@ plt.show()
 # ``torch.utils.data.Dataset`` 은 데이터셋을 나타내는 추상클래스입니다.
 # 여러분의 데이터셋은 ``Dataset`` 에 상속하고 아래와 같이 오버라이드 해야합니다.
 #
-# -  ``len(dataset)`` 에서 호출되는 ``__len__`` 은 데이터셋의 크기를 리턴해야합니다.
+# -  ``len(dataset)`` 에서 호출되는 ``__len__`` 은 데이터셋의 크기를 리턴해야 합니다.
 # -  ``dataset[i]`` 에서 호출되는 ``__getitem__`` 은
 #    :math:`i`\ 번째 샘플을 찾는데 사용됩니다.
 #
@@ -116,7 +114,7 @@ plt.show()
 #
 # 데이터셋의 샘플은  ``{'image': image, 'landmarks': landmarks}`` 의 사전 형태를 갖습니다.
 # 선택적 인자인 ``transform`` 을 통해 필요한 전처리 과정을 샘플에 적용할 수 있습니다.
-# 다음 장에서 전이 ``transform`` 의 유용성에 대해 알아보겠습니다.
+# 다음 장에서 변형 ``transform`` 의 유용성에 대해 알아보겠습니다.
 #
 
 class FaceLandmarksDataset(Dataset):
@@ -144,8 +142,7 @@ class FaceLandmarksDataset(Dataset):
                                 self.landmarks_frame.iloc[idx, 0])
         image = io.imread(img_name)
         landmarks = self.landmarks_frame.iloc[idx, 1:]
-        landmarks = np.array([landmarks])
-        landmarks = landmarks.astype('float').reshape(-1, 2)
+        landmarks = np.array([landmarks], dtype=float).reshape(-1, 2)
         sample = {'image': image, 'landmarks': landmarks}
 
         if self.transform:
@@ -164,9 +161,7 @@ face_dataset = FaceLandmarksDataset(csv_file='data/faces/face_landmarks.csv',
 
 fig = plt.figure()
 
-for i in range(len(face_dataset)):
-    sample = face_dataset[i]
-
+for i, sample in enumerate(face_dataset):
     print(i, sample['image'].shape, sample['landmarks'].shape)
 
     ax = plt.subplot(1, 4, i + 1)
@@ -182,37 +177,39 @@ for i in range(len(face_dataset)):
 
 ######################################################################
 # Transforms
-# ------------
+# ---------------
 #
-# 위에서 볼 수 있었던 한가지 문제점은 샘플들이 다 같은 크기가 아니라는 것입니다.
-# 대부분의 신경망(neural networks)은 고정된 크기의 이미지라고 가정합니다.
-# 그러므로 우리는 신경망에 주기 전에 처리할 과정을 작성해야 합니다.
+# 위에서 볼 수 있었던 한 가지 문제는 샘플들의 크기가 같지 않다는 것입니다.
+# 대부분의 신경망(neural networks)은 고정된 크기의 이미지를 입력으로 받는 것을 가정하고 있습니다.
+# 그러므로 몇 가지 전처리 코드를 작성하도록 하겠습니다.
 #
-# 3가지의 transforms 을 만들어 봅시다:
+# 다음의 3가지의 변형(transforms)을 만들어 보겠습니다:
 #
 # - ``Rescale``: 이미지의 크기를 조절합니다.
 # - ``RandomCrop``: 이미지를 무작위로 자릅니다.
-#   이것을 data augmentation이라 합니다.
-# - ``ToTensor``: numpy 이미지에서 torch 이미지로 변경합니다.
-#   (축변환이 필요합니다)
+#    이것을 데이터 증강(data augmentation)이라 합니다.
+# - ``ToTensor``: NumPy 이미지에서 torch 이미지로 변경합니다.
+#    (축 교환(axes swap)이 필요합니다)
 #
-# 간단한 함수대신에 호출 할 수 있는 클래스로 작성 합니다.
-# 이렇게 한다면, 클래스가 호출 될 때마다 전이(Transform)의 매개변수가 전달 되지 않아도 됩니다.
-# 이와 같이, ``__call__`` 함수를 구현해야 합니다.
-# 필요하다면, ``__init__`` 함수도 구현해야 합니다. 다음과 같이 전이(transform)를 사용할 수 있습니다.
+# 이러한 변형 과정을 간단한 함수들로 작성하는 대신, 호출 가능한 클래스로 작성하도록 하겠습니다.
+# 이렇게 하면 클래스가 호출될 때마다 매번 변형(Transform)의 매개변수를 전달하지 않아도 됩니다.
+# ``__call__`` 함수만 구현하면 이렇게 할 수 있으며, 필요 시에는 ``__init__`` 함수까지도 구현해야 할 수 있습니다.
+# 그런 다음 다음과 같이 변형(transform)를 사용할 수 있습니다:
 #
-# ::
+# .. code-block:: python
 #
 #     tsfm = Transform(params)
 #     transformed_sample = tsfm(sample)
 #
-# 아래에서는 이미지와 랜드마크(landmark)들을 어떻게 적용하는지 살펴보도록 하겠습니다.
+# 이러한 변환 과정을 이미지와 랜드마크(landmark)들에 어떻게 적용하는지를
+# 살펴보도록 하겠습니다.
+#
 
 class Rescale(object):
     """주어진 크기로 샘플크기를 조정합니다.
 
     Args:
-        output_size(tuple or int) : 원하는 출력 크기가
+        output_size(tuple or int) : 원하는 출력의 크기.
             tuple인 경우 해당 tuple(output_size)이 결과물(output)의 크기가 되고,
             int라면 비율을 유지하면서, 길이가 작은 쪽이 output_size가 됩니다.
     """
@@ -237,17 +234,19 @@ class Rescale(object):
 
         img = transform.resize(image, (new_h, new_w))
 
+        # 이미지의 경우 x와 y가 각각 axis 1과 0이기 때문에,
+        # 랜드마크의 경우 h와 w가 바뀌어야 합니다.
         landmarks = landmarks * [new_w / w, new_h / h]
 
         return {'image': img, 'landmarks': landmarks}
 
 
 class RandomCrop(object):
-    """샘플데이터를 무작위로 자릅니다.
+    """샘플 데이터를 무작위로 자릅니다.
 
     Args:
-        output_size (tuple or int): 줄이고자 하는 크기입니다.
-                        int라면, 정사각형으로 나올 것 입니다.
+        output_size (tuple or int): 원하는 출력의 크기.
+            int 값 입력 시 정사각형으로 잘립니다.
     """
 
     def __init__(self, output_size):
@@ -264,8 +263,8 @@ class RandomCrop(object):
         h, w = image.shape[:2]
         new_h, new_w = self.output_size
 
-        top = np.random.randint(0, h - new_h)
-        left = np.random.randint(0, w - new_w)
+        top = np.random.randint(0, h - new_h + 1)
+        left = np.random.randint(0, w - new_w + 1)
 
         image = image[top: top + new_h,
                       left: left + new_w]
@@ -276,19 +275,20 @@ class RandomCrop(object):
 
 
 class ToTensor(object):
-    """numpy array를 tensor(torch)로 변환 시켜줍니다."""
+    """NumPy의 ndarray 형태의 샘플을 Torch Tensor로 변환합니다."""
 
     def __call__(self, sample):
         image, landmarks = sample['image'], sample['landmarks']
 
-        # swap color axis because
-        # numpy image: H x W x C
-        # torch image: C x H x W
+        # NumPy 이미지와 Torch 이미지의 색상 축(axis)을 교환해야 합니다:
+        # NumPy 이미지의 모양은 H x W x C 이고,
+        # Torch 이미지의 모양은 C x H x W 이기 때문입니다.
         image = image.transpose((2, 0, 1))
         return {'image': torch.from_numpy(image),
                 'landmarks': torch.from_numpy(landmarks)}
 
 ######################################################################
+#
 # .. note::
 #     위 예시에서, `RandomCrop` 은 외부 라이브러리의 난수 생성기(random number generator; 이 경우, Numpy의 `np.random.int` )를
 #     사용하고 있습니다. 이는 `DataLoader` 가 예상치 못한 동작을 하도록 할 수 있습니다.
@@ -296,16 +296,15 @@ class ToTensor(object):
 #     실제 상황에서는 `torch.randint` 와 같은 PyTorch가 제공하는 난수 생성기를 사용하는 것이 안전합니다.
 
 ######################################################################
+#
 # Compose transforms
-# ~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~
 #
-# 이제, 샘플에 전이(transform)를 적용해 봅시다.
+# 이제, 샘플에 변형(transform)를 적용해보겠습니다.
 #
-# 이미지의 가장 짧은 측면을 256개로 rescale하고,
-# 그후에 무작위로 224개를 자른다고 가정합시다.
-# 다시말해, ``Rescale`` 과 ``RandomCrop`` 을 사용해봅시다.
-#
-# ``torchvision.transforms.Compose`` 는 위의 두작업을 하는 간단한 호출할 수 있는 클래스입니다.
+# 먼저 이미지 중 짧은 쪽의 크기를 256으로 변환(rescale)하고, 그런 다음 224 크기의 정방형으로 무작위로 자르도록 하겠습니다.
+# 이를 위해 ``Rescale`` 과 ``RandomCrop`` 을 사용합니다.
+# ``torchvision.transforms.Compose`` 클래스를 사용하여 위의 작업들을 간단하게 할 수 있습니다.
 #
 
 scale = Rescale(256)
@@ -313,7 +312,7 @@ crop = RandomCrop(128)
 composed = transforms.Compose([Rescale(256),
                                RandomCrop(224)])
 
-# Apply each of the above transforms on sample.
+# 각 변형들을 샘플에 적용합니다.
 fig = plt.figure()
 sample = face_dataset[65]
 for i, tsfrm in enumerate([scale, crop, composed]):
@@ -331,13 +330,13 @@ plt.show()
 # 데이터셋을 이용한 반복작업
 # -----------------------------
 #
-# 전이(transform)를 적용한 dataset을 만들기위해서 만들었던것을 다 집어 넣어 봅시다.
+# 변형(transform)를 적용한 dataset을 만들기 위해서 만들었던 것을 다 집어넣어 봅시다.
 #
 # 요약하자면, 데이터셋은 다음과 같이 샘플링 됩니다.
 #
-# -  이미지는 파일 전체를 메모리에 올리지않고 필요할때마다 불러와서 읽습니다.
+# -  이미지는 파일 전체를 메모리에 올리지 않고 필요할 때마다 불러와서 읽습니다.
 # -  그 후에 읽은 이미지에 Transform을 적용합니다.
-# -  transfroms 중 하나가 랜덤이기 때문에, 데이터는 샘플링때 증가합니다.
+# -  transfroms 중 하나가 랜덤이기 때문에, 데이터는 샘플링 때 증가합니다.
 #
 #
 # 우리는 이제 이전에 사용하던 것 처럼 ``for i in range`` 를 사용해서
@@ -352,9 +351,7 @@ transformed_dataset = FaceLandmarksDataset(csv_file='data/faces/face_landmarks.c
                                                ToTensor()
                                            ]))
 
-for i in range(len(transformed_dataset)):
-    sample = transformed_dataset[i]
-
+for i, sample in enumerate(transformed_dataset):
     print(i, sample['image'].size(), sample['landmarks'].size())
 
     if i == 3:
@@ -362,26 +359,26 @@ for i in range(len(transformed_dataset)):
 
 
 ######################################################################
-# 그러나, 데이터 상에서 반복하는 ``for`` 문은 많은 특징(features)를 놓칠 수 있습니다.
-# 특히, 아래와 같은 것을 놓칠 수 있습니다:
+# 하지만 단순한 ``for`` 루프를 반복하여 사용하는 경우 많은 기능들을 놓치게 됩니다.
+# 특히, 다음과 같은 과정들을 놓치고 있습니다:
 #
-# -  데이터를 묶는 과정
-# -  데이터를 섞는 과정
-# -  병렬처리 과정에서 ``multiprocessing`` 을 사용할때 데이터를 불러오는 것
+# -  데이터를 묶는 과정(batching)
+# -  데이터를 섞는 과정(shuffling)
+# - ``multiprocessing`` 워커를 사용하여 데이터를 병렬로 불러오기
 #
 # ``torch.utils.data.DataLoder`` 는 위와 같은 기능을 모두 제공해주는 반복자(iterator)입니다.
-# 사용되는 매개변수(Parameters)는 명확해야 합니다.
-# ``collate_fn`` 는 흥미로운 매개변수(Parameters) 중 하나입니다.
-# ``collate_fn`` 을 이용하여 샘플들을 정확하게 배치하는 방법을 명시할 수 있습니다.
-# 그러나, 대부분의 경우에 대해서 정확하게 작동해야 합니다.
+# 여기에 사용되는 매개변수(parameter)들은 명확해야 합니다.
+# 관심있게 살펴볼 매개변수 중 하나느 ``collate_fn`` 입니다.
+# ``collate_fn`` 을 사용하여 샘플들을 어떻게 일괄적으로 처리해야 하는지를 지정할 수 있습니다.
+# 하지만 대부분의 경우에는 기본 함수가 잘 동작합니다.
 
 dataloader = DataLoader(transformed_dataset, batch_size=4,
                         shuffle=True, num_workers=0)
 
 
-# 배치하는 과정을 보여주는 함수입니다.
+# 데이터 묶음(batching) 과정을 보여주는 헬퍼 함수(helper function)
 def show_landmarks_batch(sample_batched):
-    """Show image with landmarks for a batch of samples."""
+    """샘플 묶음(batch)에 대해 랜드마크가 표시된 이미지 보여주기"""
     images_batch, landmarks_batch = \
             sample_batched['image'], sample_batched['landmarks']
     batch_size = len(images_batch)
@@ -398,15 +395,15 @@ def show_landmarks_batch(sample_batched):
 
         plt.title('Batch from dataloader')
 
-# Windows를 사용 중이라면, 다음 줄의 주석을 제거하고 for 반복문을 들여쓰기합니다.
-# ``num_workers`` 를 0으로 변경해야 할 수도 있습니다.
+# 만약 Windows를 사용 중이라면, 다음 줄의 주석을 제거하고 for 반복문을 들여쓰기 해주세요.
+# 또한, 위쪽의 ``num_workers`` 값을 0으로 변경해야 할 수도 있습니다.
 
 # if __name__ == '__main__':
 for i_batch, sample_batched in enumerate(dataloader):
     print(i_batch, sample_batched['image'].size(),
           sample_batched['landmarks'].size())
 
-    # observe 4th batch and stop.
+    # 4번째 배치까지 살펴보고 멈추겠습니다.
     if i_batch == 3:
         plt.figure()
         show_landmarks_batch(sample_batched)
@@ -417,13 +414,15 @@ for i_batch, sample_batched in enumerate(dataloader):
 
 ######################################################################
 # Afterword: torchvision
-# ------------------------
+# --------------------------
 #
-# 이번 튜토리얼에서는, 데이터셋 작성과 사용, 전이(transforms), 데이터를 불러오는 방법에 대해서 알아봤습니다.
-# ``torchvision`` 패키지는 몇몇의 일반적인 데이터셋과 전이(transforms)들을 제공합니다.
+# 이번 튜토리얼에서는, 데이터셋 작성과 사용, 변형(transforms), 데이터를 불러오는 방법에 대해서 알아봤습니다.
+# ``torchvision`` 패키지는 몇몇의 일반적인 데이터셋과 변형(transforms)들을 제공합니다.
 # 클래스들을 따로 작성하지 않아도 될 것입니다.
-# torchvision에서의 사용가능한 일반적인 데이터셋 중 하나는 ``ImageFolder`` 입니다.
-# 이것은 다음과 같은 방식으로 구성되어 있다고 가정합니다: ::
+# torchvision에서의 사용 가능한 일반적인 데이터셋 중 하나는 ``ImageFolder`` 입니다.
+# 예를 들어 다음과 같은 방식으로 구성된 데이터셋이 있다고 가정해보겠습니다:
+#
+# .. code-block:: sh
 #
 #     root/ants/xxx.png
 #     root/ants/xxy.jpeg
@@ -435,9 +434,11 @@ for i_batch, sample_batched in enumerate(dataloader):
 #     root/bees/nsdf3.png
 #     root/bees/asd932_.png
 #
-# 여기서'ants', 'bees'는 class labels입니다.
-# 비슷하게, ``RandomHorizontalFlip`` , ``Scale`` 과 같이  ``PIL.Image`` 에서 작동하는
-# 일반적인 전이(transforms)도 사용가능합니다. 이와 같이 데이터로더(dataloader)를 사용할 수 있습니다: ::
+# 여기서'ants'와 'bees'는 class labels입니다.
+# 비슷한 방식으로 ``RandomHorizontalFlip`` 이나 ``Scale`` 과 같이  ``PIL.Image`` 에서 동작하는
+# 일반적인 변형들(transforms)도 사용 가능합니다. 다음과 같은 방식으로 DataLoader에서 사용할 수 있습니다:
+#
+# .. code-block:: python
 #
 #    import torch
 #    from torchvision import transforms, datasets
@@ -456,4 +457,4 @@ for i_batch, sample_batched in enumerate(dataloader):
 #                                                 num_workers=4)
 #
 #  training code에 대한 예시를 알고 싶다면,
-#  :doc:`transfer_learning_tutorial` 문서를 참고해주세요
+#  :doc:`transfer_learning_tutorial` 문서를 참고해 주세요.

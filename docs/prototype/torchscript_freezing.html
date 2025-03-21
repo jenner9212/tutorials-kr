@@ -6,58 +6,55 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="ko" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
-<meta property="og:title" content="Model Freezing in TorchScript" />
-  
+  <meta property="og:title" content="TorchScript로 모델 동결하기" />
 <meta property="og:type" content="article" />
-  
 <meta property="og:url" content="https://tutorials.pytorch.kr/prototype/torchscript_freezing.html" />
-  
-<meta property="og:description" content="In this tutorial, we introduce the syntax for model freezing in TorchScript. Freezing is the process of inlining Pytorch module parameters and attributes values into the TorchScript internal representation. Parameter and attribute values are treated as final values and they cannot be modified in ..." />
-  
+<meta property="og:site_name" content="PyTorch Tutorials KR" />
+<meta property="og:description" content="번역 : 김지호 이 튜토리얼에서는, TorchScript로 모델 동결 하는 문법을 소개합니다. 동결은 파이토치 모듈의 매개변수와 속성 값들을 TorchScript 내부 표현으로 인라이닝(inlining)하는 과정입니다. 매개변수와 속성 값들은 최종 값으로 처리되며 동결된 모듈에서 수정될 수 없습니다. 기본 문법: 모델 동결은 아래 API를 사용하여 호출할 수 있습니다: torch.jit.freeze(mod : ScriptModule, names : str[]) -> ScriptModule 입력 모듈은 스크립팅(scripting..." />
 <meta property="og:image" content="https://tutorials.pytorch.kr/_static/logos/logo-kr-sm-dark.png" />
-  
-<meta property="og:image:alt" content="Model Freezing in TorchScript" />
-  
+<meta property="og:image:alt" content="PyTorch Tutorials KR" />
+<meta name="description" content="번역 : 김지호 이 튜토리얼에서는, TorchScript로 모델 동결 하는 문법을 소개합니다. 동결은 파이토치 모듈의 매개변수와 속성 값들을 TorchScript 내부 표현으로 인라이닝(inlining)하는 과정입니다. 매개변수와 속성 값들은 최종 값으로 처리되며 동결된 모듈에서 수정될 수 없습니다. 기본 문법: 모델 동결은 아래 API를 사용하여 호출할 수 있습니다: torch.jit.freeze(mod : ScriptModule, names : str[]) -> ScriptModule 입력 모듈은 스크립팅(scripting..." />
 <meta property="og:ignore_canonical" content="true" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <title>Model Freezing in TorchScript &mdash; 파이토치 한국어 튜토리얼 (PyTorch tutorials in Korean)</title>
-  
 
-  
-  
+  <title>TorchScript로 모델 동결하기 &mdash; 파이토치 한국어 튜토리얼 (PyTorch tutorials in Korean)</title>
+
+
+
+
     <link rel="shortcut icon" href="../_static/favicon.ico"/>
-  
-  
-  
 
-  
 
-  
-  
-    
 
-  
+
+
+
+
+
+
+
+
 
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!-- <link rel="stylesheet" href="../_static/pygments.css" type="text/css" /> -->
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/copybutton.css" type="text/css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css" type="text/css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" type="text/css" />
   <link rel="stylesheet" href="../_static/katex-math.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
   <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/sphinx-design.5ea377869091fd0449014c60fc090103.min.css" type="text/css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-beta/dist/katex.min.css" type="text/css" />
   <link rel="stylesheet" href="../_static/css/custom.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/custom2.css" type="text/css" />
     <link rel="index" title="색인" href="../genindex.html" />
-    <link rel="search" title="검색" href="../search.html" /> 
+    <link rel="search" title="검색" href="../search.html" />
 
-  
+
   <script src="../_static/js/modernizr.min.js"></script>
 
   <!-- Preload the theme fonts -->
@@ -114,9 +111,9 @@
 
 <body class="pytorch-body">
 
-   
 
-    
+
+
 
     <div class="table-of-contents-link-wrapper">
       <span>Table of Contents</span>
@@ -127,21 +124,21 @@
       <div class="pytorch-side-scroll">
         <div class="pytorch-menu pytorch-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           <div class="pytorch-left-menu-search">
-            
 
-            
-              
-              
+
+
+
+
                 <div class="version">
-                  2.0.0+cu117
+                  2.3.1+cu121
                 </div>
-              
-            
-
-            
 
 
-  
+
+
+
+
+
 
 
 <div role="search">
@@ -152,15 +149,15 @@
   </form>
 </div>
 
-            
+
           </div>
 
-          
-            
-            
-              
-            
-            
+
+
+
+
+
+
               <p class="caption" role="heading"><span class="caption-text">파이토치(PyTorch) 레시피</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../recipes/recipes_index.html">모든 레시피 보기</a></li>
@@ -182,7 +179,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/introyt.html">PyTorch 소개 - YouTube 시리즈</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/introyt/introyt1_tutorial.html">PyTorch 소개</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/introyt/tensors_deeper_tutorial.html">Introduction to PyTorch Tensors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/introyt/tensors_deeper_tutorial.html">Pytorch Tensor 소개</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/introyt/autogradyt_tutorial.html">The Fundamentals of Autograd</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/introyt/modelsyt_tutorial.html">Building Models with PyTorch</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/introyt/tensorboardyt_tutorial.html">PyTorch TensorBoard Support</a></li>
@@ -198,11 +195,12 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">이미지/비디오</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/torchvision_tutorial.html">TorchVision 객체 검출 미세조정(Finetuning) 튜토리얼</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/torchvision_tutorial.html">TorchVision Object Detection Finetuning Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/transfer_learning_tutorial.html">컴퓨터 비전(Vision)을 위한 전이학습(Transfer Learning)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/fgsm_tutorial.html">적대적 예제 생성(Adversarial Example Generation)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/dcgan_faces_tutorial.html">DCGAN 튜토리얼</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/vt_tutorial.html">배포를 위한 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/vt_tutorial.html">배포를 위해 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/tiatoolbox_tutorial.html">Whole Slide Image Classification Using PyTorch and TIAToolbox</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">오디오</span></p>
 <ul>
@@ -214,31 +212,43 @@
 <li class="toctree-l1"><a class="reference internal" href="../beginner/audio_datasets_tutorial.html">Audio Datasets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/speech_recognition_pipeline_tutorial.html">Speech Recognition with Wav2Vec2</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/text_to_speech_with_torchaudio.html">Text-to-speech with Tacotron2</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/forced_alignment_with_torchaudio_tutorial.html">Forced Alignment with Wav2Vec2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/forced_alignment_with_torchaudio_tutorial.html">wav2vec2을 이용한 강제 정렬</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">텍스트</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/transformer_tutorial.html"><code class="docutils literal notranslate"><span class="pre">nn.Transformer</span></code> 와 torchtext로 시퀀스-투-시퀀스(Sequence-to-Sequence) 모델링하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/bettertransformer_tutorial.html">Fast Transformer Inference with Better Transformer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/char_rnn_classification_tutorial.html">기초부터 시작하는 NLP: 문자-단위 RNN으로 이름 분류하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/char_rnn_generation_tutorial.html">기초부터 시작하는 NLP:  문자-단위 RNN으로 이름 생성하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/seq2seq_translation_tutorial.html">기초부터 시작하는 NLP: Sequence to Sequence 네트워크와 Attention을 이용한 번역</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/text_sentiment_ngrams_tutorial.html">torchtext 라이브러리로 텍스트 분류하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/translation_transformer.html"><code class="docutils literal notranslate"><span class="pre">nn.Transformer</span></code> 와 torchtext로 언어 번역하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/torchtext_custom_dataset_tutorial.html">Preprocess custom text dataset using Torchtext</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">백엔드</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/onnx/intro_onnx.html">Introduction to ONNX</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">강화학습</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/reinforcement_q_learning.html">강화 학습 (DQN) 튜토리얼</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/reinforcement_ppo.html">Reinforcement Learning (PPO) with TorchRL Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/mario_rl_tutorial.html">마리오 게임 RL 에이전트로 학습하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/pendulum.html">Pendulum: Writing your environment and transforms with TorchRL</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">PyTorch 모델을 프로덕션 환경에 배포하기</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/onnx/intro_onnx.html">Introduction to ONNX</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/flask_rest_api_tutorial.html">Flask를 사용하여 Python에서 PyTorch를 REST API로 배포하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../beginner/Intro_to_TorchScript_tutorial.html">TorchScript 소개</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/cpp_export.html">C++에서 TorchScript 모델 로딩하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/super_resolution_with_onnxruntime.html">(선택) PyTorch 모델을 ONNX으로 변환하고 ONNX 런타임에서 실행하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/realtime_rpi.html">Raspberry Pi 4 에서 실시간 추론(Inference) (30fps!)</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">PyTorch 프로파일링</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/profiler.html">PyTorch 모듈 프로파일링하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/hta_intro_tutorial.html">Introduction to Holistic Trace Analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/hta_trace_diff_tutorial.html">Trace Diff using Holistic Trace Analysis</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Code Transforms with FX</span></p>
 <ul>
@@ -250,7 +260,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/memory_format_tutorial.html">(베타) PyTorch를 사용한 Channels Last 메모리 형식</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/forward_ad_usage.html">Forward-mode Automatic Differentiation (Beta)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/jacobians_hessians.html">Jacobians, Hessians, hvp, vhp, and more: composing function transforms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/ensembling.html">Model ensembling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/ensembling.html">모델 앙상블</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/per_sample_grads.html">Per-sample-gradients</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/cpp_frontend.html">PyTorch C++ 프론트엔드 사용하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/torch-script-parallelism.html">TorchScript의 동적 병렬 처리(Dynamic Parallelism)</a></li>
@@ -265,13 +275,14 @@
 <li class="toctree-l1"><a class="reference internal" href="../advanced/torch_script_custom_classes.html">커스텀 C++ 클래스로 TorchScript 확장하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/dispatcher.html">Registering a Dispatched Operator in C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/extend_dispatcher.html">Extending dispatcher for a new backend in C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/privateuseone.html">Facilitating New Backend Integration by PrivateUse1</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">모델 최적화</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/profiler.html">PyTorch 모듈 프로파일링 하기</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/tensorboard_profiler_tutorial.html">PyTorch Profiler With TensorBoard</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/hyperparameter_tuning_tutorial.html">Ray Tune을 이용한 하이퍼파라미터 튜닝</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/vt_tutorial.html">배포를 위한 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/profiler.html">PyTorch 모듈 프로파일링하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/tensorboard_profiler_tutorial.html">텐서보드를 이용한 파이토치 프로파일러</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/hyperparameter_tuning_tutorial.html">Ray Tune을 사용한 하이퍼파라미터 튜닝</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/vt_tutorial.html">배포를 위해 비전 트랜스포머(Vision Transformer) 모델 최적화하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/parametrizations.html">Parametrizations Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/pruning_tutorial.html">가지치기 기법(Pruning) 튜토리얼</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/dynamic_quantization_tutorial.html">(베타) LSTM 기반 단어 단위 언어 모델의 동적 양자화</a></li>
@@ -282,10 +293,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/torchserve_with_ipex_2.html">Grokking PyTorch Intel CPU performance from first principles (Part 2)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/nvfuser_intro_tutorial.html">Getting Started - Accelerate Your Scripts with nvFuser</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/ax_multiobjective_nas_tutorial.html">Multi-Objective NAS with Ax</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/torch_compile_tutorial.html">torch.compile Tutorial</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/scaled_dot_product_attention_tutorial.html">(Beta) Implementing High-Performance Transformers with Scaled Dot Product Attention (SDPA)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/scaled_dot_product_attention_tutorial.html#using-sdpa-with-torch-compile">Using SDPA with <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/scaled_dot_product_attention_tutorial.html#conclusion">Conclusion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/torch_compile_tutorial.html">Introduction to <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/inductor_debug_cpu.html">Inductor CPU backend debugging and profiling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/scaled_dot_product_attention_tutorial.html">(Beta) Scaled Dot Product Attention (SDPA)로 고성능 트랜스포머(Transformers) 구현하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/scaled_dot_product_attention_tutorial.html#torch-compile-sdpa"><code class="docutils literal notranslate"><span class="pre">torch.compile</span></code> 과 함께 SDPA 사용하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/scaled_dot_product_attention_tutorial.html#sdpa-atteition-bias">SDPA를 <code class="docutils literal notranslate"><span class="pre">atteition.bias</span></code> 하위 클래스와 사용하기</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/scaled_dot_product_attention_tutorial.html#id8">결론</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/knowledge_distillation_tutorial.html">Knowledge Distillation Tutorial</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">병렬 및 분산 학습</span></p>
 <ul>
@@ -297,20 +311,24 @@
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/dist_tuto.html">PyTorch로 분산 어플리케이션 개발하기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/FSDP_tutorial.html">Getting Started with Fully Sharded Data Parallel(FSDP)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/FSDP_adavnced_tutorial.html">Advanced Model Training with Fully Sharded Data Parallel (FSDP)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/process_group_cpp_extension_tutorial.html">Customize Process Group Backends Using Cpp Extensions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/TP_tutorial.html">Large Scale Transformer model training with Tensor Parallel (TP)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intermediate/process_group_cpp_extension_tutorial.html">Cpp 확장을 사용한 프로세스 그룹 백엔드 사용자 정의</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/rpc_tutorial.html">Getting Started with Distributed RPC Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/rpc_param_server_tutorial.html">Implementing a Parameter Server Using Distributed RPC Framework</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/dist_pipeline_parallel_tutorial.html">Distributed Pipeline Parallelism Using RPC</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../intermediate/rpc_async_execution.html">Implementing Batch RPC Processing Using Asynchronous Executions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/rpc_ddp_tutorial.html">분산 데이터 병렬(DDP)과 분산 RPC 프레임워크 결합</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../intermediate/pipeline_tutorial.html">파이프라인 병렬화로 트랜스포머 모델 학습시키기</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/ddp_pipeline.html">분산 데이터 병렬 처리와 병렬 처리 파이프라인을 사용한 트랜스포머 모델 학습</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../advanced/generic_join.html">Distributed Training with Uneven Inputs Using the Join Context Manager</a></li>
 </ul>
-<p class="caption" role="heading"><span class="caption-text">모바일</span></p>
+<p class="caption" role="heading"><span class="caption-text">Edge with ExecuTorch</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/deeplabv3_on_ios.html">iOS에서의 이미지 분할 DeepLapV3</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/deeplabv3_on_android.html">안드로이드에서의 이미지 분할 DeepLapV3</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/tutorials/export-to-executorch-tutorial.html">Exporting to ExecuTorch Tutorial</a></li>
+<li class="toctree-l1"><a class="reference external" href=" https://pytorch.org/executorch/stable/running-a-model-cpp-tutorial.html">Running an ExecuTorch Model in C++ Tutorial</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/tutorials/sdk-integration-tutorial.html">Using the ExecuTorch SDK to Profile a Model</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/demo-apps-ios.html">Building an ExecuTorch iOS Demo App</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/demo-apps-android.html">Building an ExecuTorch Android Demo App</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pytorch.org/executorch/stable/examples-end-to-end-to-lower-model-to-delegate.html">Lowering a Model as a Delegate</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">추천 시스템</span></p>
 <ul>
@@ -319,11 +337,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Multimodality</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../beginner/flava_finetuning_tutorial.html">TorchMultimodal Tutorial: Finetuning FLAVA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../beginner/flava_finetuning_tutorial.html">TorchMultimodal 튜토리얼: FLAVA 미세조정</a></li>
 </ul>
 
-            
-          
+
+
         </div>
       </div>
     </nav>
@@ -331,7 +349,7 @@
     <div class="pytorch-container">
       <div class="pytorch-page-level-bar" id="pytorch-page-level-bar">
         <div class="pytorch-breadcrumbs-wrapper">
-          
+
 
 
 
@@ -350,30 +368,30 @@
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="pytorch-breadcrumbs">
-    
+
       <li>
         <a href="../index.html">
-          
+
             Tutorials
-          
+
         </a> &gt;
       </li>
 
-        
-      <li>Model Freezing in TorchScript</li>
-    
-    
+
+      <li>TorchScript로 모델 동결하기</li>
+
+
       <li class="pytorch-breadcrumbs-aside">
-        
-            
+
+
             <a href="../_sources/prototype/torchscript_freezing.rst.txt" rel="nofollow"><img src="../_static/images/view-page-source-icon.svg"></a>
-          
-        
+
+
       </li>
-    
+
   </ul>
 
-  
+
 </div>
         </div>
 
@@ -385,7 +403,7 @@
       <section data-toggle="wy-nav-shift" id="pytorch-content-wrap" class="pytorch-content-wrap">
         <div class="pytorch-content-left">
 
-        
+
 
           <div class="pytorch-call-to-action-links">
             <div id="tutorial-type">prototype/torchscript_freezing</div>
@@ -407,35 +425,35 @@
             </div>
           </div>
 
-        
 
-          
+
+
           <div class="rst-content">
-          
+
             <div role="main" class="main-content" itemscope="itemscope" itemtype="http://schema.org/Article">
              <article itemprop="articleBody" id="pytorch-article" class="pytorch-article">
-              
+
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">참고</p>
 <p>Click <a class="reference internal" href="#sphx-glr-download-prototype-torchscript-freezing-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<div class="sphx-glr-example-title section" id="model-freezing-in-torchscript">
-<span id="sphx-glr-prototype-torchscript-freezing-py"></span><h1>Model Freezing in TorchScript<a class="headerlink" href="#model-freezing-in-torchscript" title="이 제목에 대한 퍼머링크">¶</a></h1>
-<p>In this tutorial, we introduce the syntax for <em>model freezing</em> in TorchScript.
-Freezing is the process of inlining Pytorch module parameters and attributes
-values into the TorchScript internal representation. Parameter and attribute
-values are treated as final values and they cannot be modified in the resulting
-Frozen module.</p>
-<div class="section" id="basic-syntax">
-<h2>Basic Syntax<a class="headerlink" href="#basic-syntax" title="이 제목에 대한 퍼머링크">¶</a></h2>
-<p>Model freezing can be invoked using API below:</p>
+<div class="sphx-glr-example-title section" id="torchscript">
+<span id="sphx-glr-prototype-torchscript-freezing-py"></span><h1>TorchScript로 모델 동결하기<a class="headerlink" href="#torchscript" title="이 제목에 대한 퍼머링크">¶</a></h1>
+<p>번역 : <a class="reference external" href="https://github.com/jiho3004/">김지호</a></p>
+<p>이 튜토리얼에서는, TorchScript로 <em>모델 동결</em> 하는 문법을 소개합니다.
+동결은 파이토치 모듈의 매개변수와 속성 값들을 TorchScript 내부 표현으로 인라이닝(inlining)하는 과정입니다.
+매개변수와 속성 값들은 최종 값으로 처리되며 동결된 모듈에서 수정될 수 없습니다.</p>
+<div class="section" id="id2">
+<h2>기본 문법<a class="headerlink" href="#id2" title="이 제목에 대한 퍼머링크">¶</a></h2>
+<p>모델 동결은 아래 API를 사용하여 호출할 수 있습니다:</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">torch.jit.freeze(mod</span> <span class="pre">:</span> <span class="pre">ScriptModule,</span> <span class="pre">names</span> <span class="pre">:</span> <span class="pre">str[])</span> <span class="pre">-&gt;</span> <span class="pre">SciptModule</span></code></p>
+<div><p><code class="docutils literal notranslate"><span class="pre">torch.jit.freeze(mod</span> <span class="pre">:</span> <span class="pre">ScriptModule,</span> <span class="pre">names</span> <span class="pre">:</span> <span class="pre">str[])</span> <span class="pre">-&gt;</span> <span class="pre">ScriptModule</span></code></p>
 </div></blockquote>
-<p>Note the input module can either be the result of scripting or tracing.
-See <a class="reference external" href="https://tutorials.pytorch.kr/beginner/Intro_to_TorchScript_tutorial.html">https://tutorials.pytorch.kr/beginner/Intro_to_TorchScript_tutorial.html</a></p>
-<p>Next, we demonstrate how freezing works using an example:</p>
+<p>입력 모듈은 스크립팅(scripting) 혹은 추적(tracing)을 사용한 결과입니다.
+<a class="reference external" href="https://tutorials.pytorch.kr/beginner/Intro_to_TorchScript_tutorial.html">TorchScript 소개 튜토리얼</a>
+을 참조하세요.</p>
+<p>다음으로, 예제를 통해 동결이 어떤 방식으로 동작하는지 확인합니다:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">torch</span><span class="o">,</span> <span class="nn">time</span>
 
 <span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
@@ -474,17 +492,15 @@ See <a class="reference external" href="https://tutorials.pytorch.kr/beginner/In
 
 <span class="k">try</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">fnet</span><span class="o">.</span><span class="n">conv1</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
-    <span class="c1"># without exception handling, prints:</span>
+    <span class="c1"># 예외 처리가 없을 시 &#39;conv1&#39; 이라는 이름과 함께 다음을 출력합니다.</span>
     <span class="c1"># RuntimeError: __torch__.z.___torch_mangle_3.Net does not have a field</span>
-    <span class="c1"># with name &#39;conv1&#39;</span>
 <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;field &#39;conv1&#39; is inlined. It does not exist in &#39;fnet&#39;&quot;</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">fnet</span><span class="o">.</span><span class="n">version</span><span class="p">()</span>
-    <span class="c1"># without exception handling, prints:</span>
+    <span class="c1"># 예외 처리가 없을 시 &#39;version&#39; 이라는 이름과 함께 다음을 출력합니다.</span>
     <span class="c1"># RuntimeError: __torch__.z.___torch_mangle_3.Net does not have a field</span>
-    <span class="c1"># with name &#39;version&#39;</span>
 <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;method &#39;version&#39; is not deleted in fnet. Only &#39;forward&#39; is preserved&quot;</span><span class="p">)</span>
 
@@ -524,27 +540,25 @@ See <a class="reference external" href="https://tutorials.pytorch.kr/beginner/In
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Frozen    - Inference time: </span><span class="si">{0:5.2f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">),</span> <span class="n">flush</span> <span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>On my machine, I measured the time:</p>
+<p>개인 머신에서 시간을 측정한 결과입니다:</p>
 <ul class="simple">
 <li><p>Scripted - Warm up time:  0.0107</p></li>
 <li><p>Frozen   - Warm up time:  0.0048</p></li>
 <li><p>Scripted - Inference:  1.35</p></li>
 <li><p>Frozen   - Inference time:  1.17</p></li>
 </ul>
-<p>In our example, warm up time measures the first two runs. The frozen model
-is 50% faster than the scripted model. On some more complex models, we
-observed even higher speed up of warm up time. freezing achieves this speed up
-because it is doing some the work TorchScript has to do when the first couple
-runs are initiated.</p>
-<p>Inference time measures inference execution time after the model is warmed up.
-Although we observed significant variation in execution time, the
-frozen model is often about 15% faster than the scripted model. When input is larger,
-we observe a smaller speed up because the execution is dominated by tensor operations.</p>
+<p>이 예제에서, 워밍업 시간은 최초 두 번 실행할 때 측정합니다.
+동결된 모델이 스크립트된 모델보다 50% 더 빠릅니다.
+보다 복잡한 모델에서는 워밍업 시간이 더욱 빨라집니다.
+최초 두 번의 실행을 초기화할 때 TorchScript가 해야 할 일의 일부를 동결이 하고 있기 때문에 속도 개선이 일어납니다.</p>
+<p>추론 시간은 모델이 워밍업되고 난 뒤, 추론 시 실행 시간을 측정합니다.
+실행 시간에 많은 편차가 있기는 하지만, 대개 동결된 모델이 스크립트된 모델보다 약 15% 더 빠릅니다.
+실행 시간은 tensor 연산에 의해 지배되기 때문에 입력의 크기가 더 커지면 속도 개선 정도는 더 작아집니다.</p>
 </div>
-<div class="section" id="conclusion">
-<h2>Conclusion<a class="headerlink" href="#conclusion" title="이 제목에 대한 퍼머링크">¶</a></h2>
-<p>In this tutorial, we learned about model freezing. Freezing is a useful technique to
-optimize models for inference and it also can significantly reduce TorchScript warmup time.</p>
+<div class="section" id="id4">
+<h2>결론<a class="headerlink" href="#id4" title="이 제목에 대한 퍼머링크">¶</a></h2>
+<p>이 튜토리얼에서는 모델 동결에 대해 배웠습니다.
+동결은 추론 시 모델 최적화를 할 수 있는 유용한 기법이며 TorchScript 워밍업 시간을 크게 줄입니다.</p>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-prototype-torchscript-freezing-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
@@ -560,12 +574,12 @@ optimize models for inference and it also can significantly reduce TorchScript w
 
 
              </article>
-             
+
             </div>
             <footer>
-  
 
-  
+
+
     <hr class="community-hr hr-top" />
     <div class="community-container">
       <div class="community-prompt">더 궁금하시거나 개선할 내용이 있으신가요? 커뮤니티에 참여해보세요!</div>
@@ -585,19 +599,19 @@ optimize models for inference and it also can significantly reduce TorchScript w
       </div>
     </div>
     <hr class="rating-hr hr-bottom"/>
-  
+
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018-2023, PyTorch &amp; 파이토치 한국 사용자 모임(PyTorch Korea User Group).
+        &copy; Copyright 2018-2024, PyTorch &amp; 파이토치 한국 사용자 모임(PyTorch Korea User Group).
 
     </p>
   </div>
-    
+
       <div>
         Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
       </div>
-     
+
 
 </footer>
 
@@ -615,9 +629,9 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
           <div class="pytorch-right-menu" id="pytorch-right-menu">
             <div class="pytorch-side-scroll" id="pytorch-side-scroll-right">
               <ul>
-<li><a class="reference internal" href="#">Model Freezing in TorchScript</a><ul>
-<li><a class="reference internal" href="#basic-syntax">Basic Syntax</a></li>
-<li><a class="reference internal" href="#conclusion">Conclusion</a></li>
+<li><a class="reference internal" href="#">TorchScript로 모델 동결하기</a><ul>
+<li><a class="reference internal" href="#id2">기본 문법</a></li>
+<li><a class="reference internal" href="#id4">결론</a></li>
 </ul>
 </li>
 </ul>
@@ -628,12 +642,12 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
       </section>
     </div>
 
-  
 
 
-  
-  
-     
+
+
+
+
        <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
          <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
          <script src="../_static/jquery.js"></script>
@@ -643,12 +657,12 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
          <script src="../_static/clipboard.min.js"></script>
          <script src="../_static/copybutton.js"></script>
          <script src="../_static/translations.js"></script>
-         <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.js"></script>
-         <script src="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/contrib/auto-render.min.js"></script>
+         <script src="../_static/katex.min.js"></script>
+         <script src="../_static/auto-render.min.js"></script>
          <script src="../_static/katex_autorenderer.js"></script>
          <script src="../_static/design-tabs.js"></script>
-     
-  
+
+
 
   <script type="text/javascript" src="../_static/js/vendor/popper.min.js"></script>
   <script type="text/javascript" src="../_static/js/vendor/bootstrap.min.js"></script>
@@ -660,10 +674,12 @@ if((window.location.href.indexOf("/prototype/")!= -1) && (window.location.href.i
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
- 
-<script>
-//add microsoft link
 
+<script>
+// Helper function to make it easier to call dataLayer.push()
+function gtag(){window.dataLayer.push(arguments);}
+
+//add microsoft link
 if(window.location.href.indexOf("/beginner/basics/")!= -1)
 {
   var url="https://docs.microsoft.com/learn/paths/pytorch-fundamentals/?wt.mc_id=aiml-7486-cxa";
@@ -699,7 +715,7 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
 </script>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-LZRD6GXDLF"></script>
-<script>
+<script data-cfasync="false">
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
@@ -708,7 +724,7 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
 </script>
 
 
-<script>
+<script data-cfasync="false">
   $("[data-behavior='call-to-action-event']").on('click', function(){
     ga('send', {
       hitType: 'event',
@@ -728,7 +744,8 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
     gtag('event', 'click', {
       'event_category': 'Tutorial Rating',
       'event_label': $("h1").first().text(),
-      'value': $(this).attr("data-count")
+      'value': $(this).attr("data-count"),
+      'customEvent:Rating': $(this).attr("data-count") // send to GA custom dimension customEvent:Rating.
     });
    });
 
@@ -739,7 +756,7 @@ if(window.location.href.indexOf("/beginner/basics/")!= -1)
 </script>
 
 <script type="text/javascript">
-  var collapsedSections = ['파이토치(PyTorch) 레시피', '파이토치(PyTorch) 배우기', '이미지/비디오', '오디오', '텍스트', '강화학습', 'PyTorch 모델을 프로덕션 환경에 배포하기', 'Code Transforms with FX', '프론트엔드 API', 'PyTorch 확장하기', '모델 최적화', '병렬 및 분산 학습', '모바일', 'Introduction to PyTorch on YouTube', '추천 시스템', 'Multimodality'];
+  var collapsedSections = ['파이토치(PyTorch) 레시피', '파이토치(PyTorch) 배우기', 'Introduction to PyTorch on YouTube', '이미지/비디오', '오디오', '텍스트', '백엔드', '강화학습', 'PyTorch 모델을 프로덕션 환경에 배포하기', 'PyTorch 프로파일링', 'Code Transforms with FX', '프론트엔드 API', 'PyTorch 확장하기', '모델 최적화', '병렬 및 분산 학습', 'Edge with ExecuTorch', '추천 시스템', 'Multimodality'];
 </script>
 
 
